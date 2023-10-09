@@ -1,0 +1,15 @@
+[submodule "thirdparty_module/TorchSDF"] 
+    path = thirdparty_module/TorchSDF
+    url = git@github.com:wrc042/TorchSDF.git
+
+[submodule "thirdparty_module/pytorch3d"]
+    path = thirdparty_module/pytorch3d
+    url = git@github.com:facebookresearch/pytorch3d.git
+
+[submodule "thirdparty_module/segment-anything"]
+    path = thirdparty_module/segment-anything
+    url = git@github.com:facebookresearch/segment-anything.git
+
+[submodule "thirdparty_module/dinov2"]
+    path = thirdparty_module/dinov2
+    url = git@github.com:facebookresearch/dinov2.git
