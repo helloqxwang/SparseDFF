@@ -1,0 +1,21 @@
+seed: 1
+device: null
+visualize: false
+verbose: true
+extrinsics_path: ./camera/workspace/calibration.json
+data1: /home/user/wangqx/stanford/kinect/data/20230929_150633
+data2: /home/user/wangqx/stanford/kinect/data/20230929_150633
+model_path: null
+img_preprocess: 
+  - sam
+  - sam
+scale: 14
+dis_threshold: 0.1
+quotient_threshold: 0.8
+method: vote_3D
+mode: hand
+hand_model:
+  tip_aug: 4
+  pt_nums: 500
+alignment:
+  opt_iterations: 300

@@ -1,0 +1,753 @@
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/image', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 26, 'cam1': 26, 'cam2': 26, 'cam3': 26}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 26, 'cam1': 26, 'cam2': 26, 'cam3': 26}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (640, 576), 'cam1': (640, 576), 'cam2': (640, 576), 'cam3': (640, 576)}
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.31
+INFO - Camera {'dist': array([[-0.403 ,  0.1125,  0.0326,  0.0004,  0.2483]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[544.1285,   0.    , 323.0773],
+              [  0.    , 525.032 , 296.8498],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.21
+INFO - Camera {'dist': array([[-0.3668,  0.392 ,  0.001 ,  0.0014, -1.6752]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[516.3646,   0.    , 324.9954],
+              [  0.    , 515.4105, 338.0706],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.20
+INFO - Camera {'dist': array([[-0.4699,  1.1239,  0.0258, -0.0003, -3.3457]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[549.036 ,   0.    , 323.2085],
+              [  0.    , 532.4205, 296.8278],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.31
+INFO - Camera {'dist': array([[-0.3649,  0.1391,  0.0176,  0.0001,  0.0377]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[530.6907,   0.    , 316.0569],
+              [  0.    , 517.2421, 301.9707],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='thin_prism', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 26, 'cam1': 26, 'cam2': 26, 'cam3': 26}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (640, 576), 'cam1': (640, 576), 'cam2': (640, 576), 'cam3': (640, 576)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.31
+INFO - Camera {'dist': array([[-0.3573,  0.0736, -0.0096,  0.0058,  0.3281,  0.    ,  0.    ,
+                0.    , -0.0161, -0.0014,  0.0507,  0.0024]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[516.0061,   0.    , 347.9594],
+              [  0.    , 513.0478, 286.4924],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.21
+INFO - Camera {'dist': array([[-0.432 ,  0.7883, -0.0162,  0.0011, -1.5512,  0.    ,  0.    ,
+                0.    , -0.0003, -0.0058,  0.0603, -0.0083]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[515.4006,   0.    , 335.0999],
+              [  0.    , 512.9698, 275.552 ],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.20
+INFO - Camera {'dist': array([[-0.4638,  0.8142, -0.003 ,  0.005 , -1.2357,  0.    ,  0.    ,
+                0.    , -0.0108, -0.0082,  0.0675, -0.0668]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[527.4511,   0.    , 337.7164],
+              [  0.    , 516.6688, 265.7051],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.31
+INFO - Camera {'dist': array([[-0.4319,  0.3681,  0.0259,  0.0025, -0.2612,  0.    ,  0.    ,
+                0.    , -0.0046, -0.0113,  0.0186, -0.0332]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[546.1803,   0.    , 324.1458],
+              [  0.    , 525.1218, 279.7489],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='rational', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 26, 'cam1': 26, 'cam2': 26, 'cam3': 26}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (640, 576), 'cam1': (640, 576), 'cam2': (640, 576), 'cam3': (640, 576)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.31
+INFO - Camera {'dist': array([[-0.1861,  0.035 ,  0.0326,  0.0004, -3.9516,  0.2085,  0.146 ,
+               -5.0617,  0.    ,  0.    ,  0.    ,  0.    ,  0.    ,  0.    ]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[543.9821,   0.    , 323.0764],
+              [  0.    , 524.9065, 296.8849],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.21
+INFO - Camera {'dist': array([[ -0.2016,  -0.0192,   0.001 ,   0.0014, -11.5181,   0.1633,
+                -0.2795, -10.8889,   0.    ,   0.    ,   0.    ,   0.    ,
+                 0.    ,   0.    ]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[516.4574,   0.    , 325.0781],
+              [  0.    , 515.4705, 337.8993],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.20
+INFO - Camera {'dist': array([[ -0.1843,   2.3789,   0.0141,   0.0005, 105.4931,   0.3095,
+                 0.1584, 122.1295,   0.    ,   0.    ,   0.    ,   0.    ,
+                 0.    ,   0.    ]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[533.9904,   0.    , 324.9764],
+              [  0.    , 525.532 , 320.2838],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.31
+INFO - Camera {'dist': array([[-0.1775,  0.0002,  0.0176,  0.0001,  1.3232,  0.1944, -0.144 ,
+                1.541 ,  0.    ,  0.    ,  0.    ,  0.    ,  0.    ,  0.    ]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[530.8404,   0.    , 315.997 ],
+              [  0.    , 517.3867, 301.9177],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 26, 'cam1': 26, 'cam2': 26, 'cam3': 26}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (640, 576), 'cam1': (640, 576), 'cam2': (640, 576), 'cam3': (640, 576)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.31
+INFO - Camera {'dist': array([[-0.403 ,  0.1125,  0.0326,  0.0004,  0.2483]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[544.1285,   0.    , 323.0773],
+              [  0.    , 525.032 , 296.8498],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.21
+INFO - Camera {'dist': array([[-0.3668,  0.392 ,  0.001 ,  0.0014, -1.6752]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[516.3646,   0.    , 324.9954],
+              [  0.    , 515.4105, 338.0706],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.20
+INFO - Camera {'dist': array([[-0.4699,  1.1239,  0.0258, -0.0003, -3.3457]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[549.036 ,   0.    , 323.2085],
+              [  0.    , 532.4205, 296.8278],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.31
+INFO - Camera {'dist': array([[-0.3649,  0.1391,  0.0176,  0.0001,  0.0377]]),
+        'image_size': (640, 576),
+        'intrinsic': array([[530.6907,   0.    , 316.0569],
+              [  0.    , 517.2421, 301.9707],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 50, 'cam1': 50, 'cam2': 50, 'cam3': 50}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.25
+INFO - Camera {'dist': array([[ 0.0857, -0.0181,  0.0032,  0.0011, -0.0852]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1845.8206,    0.    , 1926.7226],
+              [   0.    , 1842.6238, 1106.7318],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.28
+INFO - Camera {'dist': array([[ 0.1032, -0.1188,  0.0033,  0.0002,  0.0765]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1840.5865,    0.    , 1925.6486],
+              [   0.    , 1839.0089, 1111.7953],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.48
+INFO - Camera {'dist': array([[ 0.0955, -0.0897,  0.0033, -0.001 ,  0.0422]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1851.0471,    0.    , 1904.8761],
+              [   0.    , 1850.3845, 1116.1932],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.50
+INFO - Camera {'dist': array([[ 0.0988, -0.1098,  0.0024,  0.001 ,  0.0675]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1852.4892,    0.    , 1923.7259],
+              [   0.    , 1851.2293, 1100.2623],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 50, 'cam1': 50, 'cam2': 50, 'cam3': 50}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.25
+INFO - Camera {'dist': array([[ 0.0857, -0.0181,  0.0032,  0.0011, -0.0852]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1845.8206,    0.    , 1926.7226],
+              [   0.    , 1842.6238, 1106.7318],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.28
+INFO - Camera {'dist': array([[ 0.1032, -0.1188,  0.0033,  0.0002,  0.0765]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1840.5865,    0.    , 1925.6486],
+              [   0.    , 1839.0089, 1111.7953],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.48
+INFO - Camera {'dist': array([[ 0.0955, -0.0897,  0.0033, -0.001 ,  0.0422]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1851.0471,    0.    , 1904.8761],
+              [   0.    , 1850.3845, 1116.1932],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.50
+INFO - Camera {'dist': array([[ 0.0988, -0.1098,  0.0024,  0.001 ,  0.0675]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1852.4892,    0.    , 1923.7259],
+              [   0.    , 1851.2293, 1100.2623],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 41, 'cam1': 41, 'cam2': 41, 'cam3': 41}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.24
+INFO - Camera {'dist': array([[ 0.0736,  0.0335,  0.0044, -0.0007, -0.1926]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[617.003 ,   0.    , 635.0169],
+              [  0.    , 616.2727, 371.5956],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.32
+INFO - Camera {'dist': array([[ 0.0941, -0.0988,  0.0026, -0.0007,  0.0533]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[618.9426,   0.    , 637.3103],
+              [  0.    , 617.2295, 363.7061],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 41, 'cam1': 41, 'cam2': 41, 'cam3': 41}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.24
+INFO - Camera {'dist': array([[ 0.0736,  0.0335,  0.0044, -0.0007, -0.1926]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[617.003 ,   0.    , 635.0169],
+              [  0.    , 616.2727, 371.5956],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.32
+INFO - Camera {'dist': array([[ 0.0941, -0.0988,  0.0026, -0.0007,  0.0533]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[618.9426,   0.    , 637.3103],
+              [  0.    , 617.2295, 363.7061],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 41, 'cam1': 41, 'cam2': 41, 'cam3': 41}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.24
+INFO - Camera {'dist': array([[ 0.0736,  0.0335,  0.0044, -0.0007, -0.1926]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[617.003 ,   0.    , 635.0169],
+              [  0.    , 616.2727, 371.5956],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.32
+INFO - Camera {'dist': array([[ 0.0941, -0.0988,  0.0026, -0.0007,  0.0533]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[618.9426,   0.    , 637.3103],
+              [  0.    , 617.2295, 363.7061],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 41, 'cam1': 41, 'cam2': 41, 'cam3': 41}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.0928, -0.0413,  0.003 ,  0.0008, -0.0489]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.5246,   0.    , 641.522 ],
+              [  0.    , 614.5816, 370.8231],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.24
+INFO - Camera {'dist': array([[ 0.0736,  0.0335,  0.0044, -0.0007, -0.1926]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[617.003 ,   0.    , 635.0169],
+              [  0.    , 616.2727, 371.5956],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.32
+INFO - Camera {'dist': array([[ 0.0941, -0.0988,  0.0026, -0.0007,  0.0533]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[618.9426,   0.    , 637.3103],
+              [  0.    , 617.2295, 363.7061],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 51, 'cam1': 51, 'cam2': 51, 'cam3': 51}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.23
+INFO - Camera {'dist': array([[ 0.0816,  0.0014,  0.0031,  0.0016, -0.1121]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[614.6749,   0.    , 644.2063],
+              [  0.    , 613.6717, 369.0536],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.22
+INFO - Camera {'dist': array([[ 0.1074, -0.1333,  0.0027,  0.0014,  0.0856]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[612.4536,   0.    , 642.7974],
+              [  0.    , 612.3213, 371.0485],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.24
+INFO - Camera {'dist': array([[ 0.0778, -0.0201,  0.0043, -0.0005, -0.0523]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[615.8527,   0.    , 635.5883],
+              [  0.    , 614.8653, 371.8328],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.25
+INFO - Camera {'dist': array([[ 0.0938, -0.0973,  0.0031,  0.0006,  0.0524]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[616.4879,   0.    , 640.4432],
+              [  0.    , 615.4121, 366.618 ],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 27, 'cam1': 27, 'cam2': 27, 'cam3': 27}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.49
+INFO - Camera {'dist': array([[ 0.1003, -0.0815,  0.0054, -0.001 ,  0.0013]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1841.1396,    0.    , 1923.3212],
+              [   0.    , 1843.0181, 1126.3773],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.65
+INFO - Camera {'dist': array([[ 0.0799, -0.0571,  0.0038, -0.0025,  0.025 ]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1846.1751,    0.    , 1917.6706],
+              [   0.    , 1847.4211, 1115.8955],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.42
+INFO - Camera {'dist': array([[ 0.1049, -0.1216,  0.0046,  0.0017,  0.073 ]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1853.7641,    0.    , 1918.2544],
+              [   0.    , 1851.2583, 1123.4198],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.80
+INFO - Camera {'dist': array([[ 0.1027, -0.121 ,  0.0051,  0.0005,  0.0773]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1846.8414,    0.    , 1918.855 ],
+              [   0.    , 1843.3528, 1121.3721],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='../{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 5, 'cam1': 5, 'cam2': 5, 'cam3': 5}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.36
+INFO - Camera {'dist': array([[ 0.0542,  0.4976,  0.0037,  0.0003, -1.88  ]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1852.8739,    0.    , 1928.2512],
+              [   0.    , 1838.6668, 1105.7563],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.25
+INFO - Camera {'dist': array([[ 0.0974, -0.0526,  0.0057,  0.0011, -0.0336]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1839.0675,    0.    , 1921.6764],
+              [   0.    , 1837.8707, 1124.5946],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.32
+INFO - Camera {'dist': array([[ 0.0627,  0.0629,  0.007 ,  0.0018, -0.1936]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1854.6627,    0.    , 1910.4714],
+              [   0.    , 1850.3568, 1130.4143],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.71
+INFO - Camera {'dist': array([[ 0.0411,  0.7768,  0.004 ,  0.0019, -3.375 ]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1860.1217,    0.    , 1920.954 ],
+              [   0.    , 1841.8806, 1109.6361],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 5, 'cam1': 5, 'cam2': 5, 'cam3': 5}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.43
+INFO - Camera {'dist': array([[ 0.2149, -0.6115, -0.0191,  0.0077,  0.536 ]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[592.0165,   0.    , 640.6371],
+              [  0.    , 665.271 , 354.9531],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.31
+INFO - Camera {'dist': array([[ 0.0732, -0.0589,  0.0021, -0.0106, -0.0017]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[604.3299,   0.    , 632.4847],
+              [  0.    , 613.0001, 372.6616],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.30
+INFO - Camera {'dist': array([[ 0.0493,  0.4328,  0.008 , -0.0024, -1.382 ]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[616.4765,   0.    , 637.1189],
+              [  0.    , 617.8513, 382.5211],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.33
+INFO - Camera {'dist': array([[ 0.1251, -0.7625,  0.0036, -0.0087,  2.8107]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[615.9395,   0.    , 637.4576],
+              [  0.    , 623.1671, 365.2797],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 26, 'cam1': 26, 'cam2': 26, 'cam3': 26}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.24
+INFO - Camera {'dist': array([[ 0.0866,  0.0071,  0.0013, -0.0021, -0.1483]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[625.0903,   0.    , 632.7628],
+              [  0.    , 617.9198, 357.428 ],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.19
+INFO - Camera {'dist': array([[ 0.1021, -0.1088,  0.0026,  0.0008,  0.0604]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[613.4026,   0.    , 642.9297],
+              [  0.    , 614.9667, 371.6336],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.27
+INFO - Camera {'dist': array([[ 0.0906, -0.074 ,  0.0008, -0.0001,  0.032 ]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[599.9655,   0.    , 640.6909],
+              [  0.    , 599.5588, 375.3866],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.21
+INFO - Camera {'dist': array([[ 0.0898, -0.059 ,  0.0033,  0.0015, -0.0143]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[615.0113,   0.    , 642.4341],
+              [  0.    , 615.5223, 370.1104],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards='boards.yaml', camera_pattern='{camera}/', cameras=['cam0', 'cam1', 'cam2', 'cam3'], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 31, 'cam1': 31, 'cam2': 31, 'cam3': 31}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.19
+INFO - Camera {'dist': array([[ 0.0778,  0.017 ,  0.002 , -0.0004, -0.1164]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[627.4375,   0.    , 635.3927],
+              [  0.    , 620.2002, 355.5897],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.17
+INFO - Camera {'dist': array([[ 0.092 , -0.0383,  0.0017, -0.0002, -0.0437]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[617.3979,   0.    , 640.9324],
+              [  0.    , 611.5269, 362.0668],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.17
+INFO - Camera {'dist': array([[ 0.0911, -0.0645,  0.0018,  0.0006, -0.0056]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[618.2659,   0.    , 640.3719],
+              [  0.    , 616.8541, 363.7927],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.16
+INFO - Camera {'dist': array([[ 0.08  ,  0.0345,  0.0018,  0.0023, -0.1929]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[621.4789,   0.    , 643.4603],
+              [  0.    , 617.4384, 359.7861],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards=None, camera_pattern=None, cameras=[], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 38, 'cam1': 38, 'cam2': 38, 'cam3': 38}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (1280, 720), 'cam1': (1280, 720), 'cam2': (1280, 720), 'cam3': (1280, 720)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.23
+INFO - Camera {'dist': array([[ 0.0852, -0.0266,  0.0019, -0.0007, -0.0679]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[628.5021,   0.    , 634.8738],
+              [  0.    , 624.7282, 358.9519],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.18
+INFO - Camera {'dist': array([[ 0.0887, -0.0219,  0.0004,  0.0023, -0.0725]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[629.7187,   0.    , 643.4993],
+              [  0.    , 626.4443, 355.1708],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.20
+INFO - Camera {'dist': array([[ 0.0836, -0.0044,  0.0007,  0.0004, -0.1136]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[625.2124,   0.    , 640.82  ],
+              [  0.    , 618.3923, 351.951 ],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.18
+INFO - Camera {'dist': array([[ 0.0825, -0.0102,  0.0025, -0.0009, -0.0763]]),
+        'image_size': (1280, 720),
+        'intrinsic': array([[620.2185,   0.    , 639.8874],
+              [  0.    , 617.0925, 362.5827],
+              [  0.    ,   0.    ,   1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards=None, camera_pattern=None, cameras=[], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 24, 'cam1': 24, 'cam2': 24, 'cam3': 24}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Calibrated cam0, with RMS=0.24
+INFO - Camera {'dist': array([[ 0.0851, -0.0239,  0.002 , -0.0008, -0.0677]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1874.645 ,    0.    , 1904.6949],
+              [   0.    , 1865.902 , 1087.1712],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam1, with RMS=0.15
+INFO - Camera {'dist': array([[ 0.083 , -0.0098,  0.0023,  0.0018, -0.0747]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1836.1859,    0.    , 1927.8889],
+              [   0.    , 1840.6141, 1119.0246],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam2, with RMS=0.17
+INFO - Camera {'dist': array([[ 0.089 , -0.0569,  0.0019,  0.0002, -0.019 ]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1857.1507,    0.    , 1920.8376],
+              [   0.    , 1851.457 , 1087.9529],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Calibrated cam3, with RMS=0.17
+INFO - Camera {'dist': array([[ 0.0832, -0.0187,  0.0027, -0.0002, -0.0648]]),
+        'image_size': (3840, 2160),
+        'intrinsic': array([[1843.8793,    0.    , 1924.3874],
+              [   0.    , 1846.3174, 1112.3112],
+              [   0.    ,    0.    ,    1.    ]])}
+INFO - 
+INFO - Writing single calibrations to ./intrinsic.json
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards=None, camera_pattern=None, cameras=[], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 34, 'cam1': 34, 'cam2': 34, 'cam3': 34}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards=None, camera_pattern=None, cameras=[], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 34, 'cam1': 34, 'cam2': 34, 'cam3': 34}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Loaded detections from .intrinsic/detections.pkl
+INFO - Intrinsic(paths=PathOpts(name='intrinsic', output_path=None, master=None, image_path='.', boards=None, camera_pattern=None, cameras=[], limit_images=200), camera=CameraOpts(fix_aspect=False, allow_skew=False, distortion_model='standard', motion_model='static', isFisheye=False, calibration=None, limit_intrinsic=50), runtime=RuntimeOpts(num_threads=31, log_level='INFO', no_cache=False, seed=0))
+INFO - Finding images in .
+INFO - Found camera directories ['cam0', 'cam1', 'cam2', 'cam3'] with 4 matching images
+INFO - Found camera directories with images {'cam0': 20, 'cam1': 20, 'cam2': 20, 'cam3': 20}
+INFO - Using boards:
+INFO - charuco CharucoBoard {type='charuco', aruco_dict='4X4_1000', aruco_offset=0, size=(8, 11), num_ids=44, marker_length=0.025, square_length=0.032, aruco_params={}}
+INFO - Loading images..
+INFO - {'cam0': (3840, 2160), 'cam1': (3840, 2160), 'cam2': (3840, 2160), 'cam3': (3840, 2160)}
+INFO - Config changed, not using loaded detections in .intrinsic/detections.pkl
+INFO - Detecting boards..
+INFO - Writing detection cache to .intrinsic/detections.pkl
