@@ -3,10 +3,14 @@
 ## Installation
 ```
 conda create -n sparsedff python=3.9
-pip install open3d opencv-python scikit-image pyk4a trimesh
+conda env update -f conda.yml
 ```
 
 ## Run our Demo
+```
+python unified_optimize.py
+```
 
 ## Visualize
+
 
