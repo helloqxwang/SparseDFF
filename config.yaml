@@ -1,7 +1,7 @@
 seed: 1
 device: null
 visualize: false
-verbose: true
+verbose: false
 extrinsics_path: ./camera/workspace/calibration.json
 data1: /home/user/wangqx/stanford/kinect/data/20230929_150633
 data2: /home/user/wangqx/stanford/kinect/data/20230929_150633

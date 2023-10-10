@@ -17,7 +17,6 @@ def robust_compute_rotation_matrix_from_ortho6d(poses):
     create a base that takes into account the two predicted
     directions equally
     """
-    ### COOL!!! we can freely update the pose without worrying about the orthogonality
     x_raw = poses[:, 0:3]  # batch*3
     y_raw = poses[:, 3:6]  # batch*3
 
@@ -30,23 +29,18 @@ def robust_compute_rotation_matrix_from_ortho6d(poses):
     y = orthmid
     x = normalize_vector(middle + orthmid)
     y = normalize_vector(middle - orthmid)
-    # Their scalar product should be small !
-    # assert torch.einsum("ij,ij->i", [x, y]).abs().max() < 0.00001
     z = normalize_vector(cross_product(x, y))
-    # print('z', z)
 
     x = x.view(-1, 3, 1)
     y = y.view(-1, 3, 1)
     z = z.view(-1, 3, 1)
     matrix = torch.cat((x, y, z), 2)  # batch*3*3
-    # Check for reflection in matrix ! If found, flip last vector TODO
-    # assert (torch.stack([torch.det(mat) for mat in matrix ])< 0).sum() == 0
     return matrix
 
 
 def normalize_vector(v):
     batch = v.shape[0]
-    v_mag = torch.sqrt(v.pow(2).sum(1))  # batch
+    v_mag = torch.sqrt(v.pow(2).sum(1))  
     v_mag = torch.max(v_mag, v.new([1e-8]))
     v_mag = v_mag.view(batch, 1).expand(batch, v.shape[1])
     v = v/v_mag
@@ -105,7 +99,6 @@ class GripperModel:
         surface_points = pytorch3d.ops.sample_farthest_points(dense_point_cloud, K=self.n_surface_points)[0][0]
         surface_points.to(dtype=float, device=self.device)
         self.surface_points = surface_points
-        # print('surface_points', surface_points.shape)
         # the first 3 are the x,y,z of the center of the gripper
         # the next 6 are the 6D rotation representation
         self.global_translation = None
@@ -173,16 +166,4 @@ class GripperModel:
                 pose = pose[idx]
             assert pose.ndim == 1
             np.save(path, pose) 
-    
-    
-
-
-if __name__ == '__main__':
-    gripper = GripperModel(device='cpu')
-    gripper.set_parameters(torch.tensor([[0.1, 0.2, 0.3, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6]]))
-    points = gripper.get_surface_points()
-    print(points.shape)
-    mesh = gripper.get_trimesh_data(0)
-    pt_vis(points[0].detach().cpu().numpy(), 0.1)
-    mesh.show()
 

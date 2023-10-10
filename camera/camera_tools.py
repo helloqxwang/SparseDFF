@@ -155,11 +155,8 @@ def get_extrinsics_from_json(path:str):
         np.ndarray: extrinsics of the four cameras [world_cam] shape: (4, 4, 4)
     """
 
-    ### this must be world2camera
-
     with open(path, 'r') as f:
         data = json.load(f)
-    cam0 = data['camera_poses']["cam0"]
     cam1 = data['camera_poses']["cam1_to_cam0"]
     cam2 = data['camera_poses']["cam2_to_cam0"]
     cam3 = data['camera_poses']["cam3_to_cam0"]
@@ -321,14 +318,12 @@ def read_hand_arm(forder_path:str='/home/user/wangqx/stanford/kinect/hand_arm', 
     file_ls = os.listdir(forder_path)
     hand_path_ls:list = [item for item in file_ls if 'hand' in item]
     arm_path_ls:list = [item for item in file_ls if 'arm' in item]
-    print(hand_path_ls)
     pose_ls = []
     for i in range(len(hand_path_ls)):
         hand_path = os.path.join(forder_path, hand_path_ls[i])
         arm_path = os.path.join(forder_path, arm_path_ls[i])
         hand = np.load(hand_path)
         arm = np.load(arm_path)
-        print(arm.shape)
         posi = arm[:3]
         rot_matrix = Rotation.from_rotvec(arm[3:]).as_matrix()
         # this is in the base_link frame (TCP2baselink)
@@ -377,7 +372,6 @@ if __name__ == '__main__':
     frame_base.transform(np.linalg.inv(cam2base)).transform(np.linalg.inv(table2cam))
     vis = o3d.visualization.Visualizer()
     vis.create_window()
-
     vis.add_geometry(frame_table)
     vis.add_geometry(frame_cam)
     vis.add_geometry(frame_base)

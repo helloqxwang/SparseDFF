@@ -4,12 +4,10 @@ import numpy as np
 import argparse
 import pyk4a
 from pyk4a import Config, PyK4A, connected_device_count, Calibration
-import open3d as o3d
 import cv2
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from .camera_tools import vis_color_pc
-# from match_train.match_tools import 
 
 
 def capture_mannul(args):
@@ -43,8 +41,6 @@ def capture_mannul(args):
         
         for i in range(20):
             capture = device.get_capture()
-            # if np.any(capture.depth) and np.any(capture.color):
-            #     break
         store_path = os.path.join(path, f"{device.serial}")
         os.makedirs(store_path, exist_ok=True)
         points = capture.transformed_depth_point_cloud
@@ -93,7 +89,6 @@ def capture_auto(save=True, path='/home/user/wangqx/stanford/kinect/data', name=
         print("No devices available")
         exit()
     print(f"Available devices: {cnt}")
-    now = datetime.datetime.now()
     str_time = name
     path = os.path.join(path, str_time)
     points_list = []

@@ -166,10 +166,8 @@ class HandModelMJCF:
                             scale = (visual.geom_param[1]).to(dtype=torch.float, device=device)
                     vertices = torch.tensor(
                         link_mesh.vertices, dtype=torch.float, device=device)
-                    ### faces 在.obj文件中的存储格式就是n个点 f, p1_index, p2_index, p3_index
                     faces = torch.tensor(
                         link_mesh.faces, dtype=torch.float, device=device)
-                    ### 每个结构的offset
                     pos = visual.offset.to(dtype=torch.float, device=device)
                     ### scale the vertices and move it to loc
                     vertices = vertices * scale
@@ -186,14 +184,6 @@ class HandModelMJCF:
             for children in body.children:
                 build_mesh_recurse(children)
         build_mesh_recurse(self.chain._root)
-        # print(self.mesh.keys())
-        '''self.mesh and areas are both dict. THEY ALL HAVE 23 KEYS'''
-        # dict_keys(['robot0:palm', 'robot0:ffknuckle_child'(关节), 'robot0:ffproximal_child（近端的）', 'robot0:ffmiddle_child（中间）', 
-        # 'robot0:ffdistal_child（末端）', 'robot0:mfknuckle_child', 'robot0:mfproximal_child', 'robot0:mfmiddle_child', 
-        # 'robot0:mfdistal_child', 'robot0:rfknuckle_child', 'robot0:rfproximal_child', 'robot0:rfmiddle_child', 
-        # 'robot0:rfdistal_child', 'robot0:lfmetacarpal_child', 'robot0:lfknuckle_child', 'robot0:lfproximal_child', 
-        # 'robot0:lfmiddle_child', 'robot0:lfdistal_child', 'robot0:thbase_child', 'robot0:thproximal_child', 
-        # 'robot0:thhub_child', 'robot0:thmiddle_child', 'robot0:thdistal_child'])
         self.joints_names = []
         self.joints_lower = []
         self.joints_upper = []
@@ -227,9 +217,7 @@ class HandModelMJCF:
             areas['robot0:thmiddle_child'] *= tip_aug * 0.8
 
         total_area = sum(areas.values())
-        ### 计算在每个mesh上应该sample的点数
         num_samples = dict([(link_name, int(areas[link_name] / total_area * n_surface_points)) for link_name in self.mesh])
-        ### 补齐因为向下取整缺少的点
         num_samples[list(num_samples.keys())[0]] += n_surface_points - sum(num_samples.values())
         for link_name in self.mesh:
             if num_samples[link_name] == 0:
@@ -295,7 +283,6 @@ class HandModelMJCF:
             rotation = rotation_6d_to_matrix_ori(hand_pose[:, 3:9])
         rot_vec = Rotation.from_matrix(rotation.cpu().numpy()).as_rotvec()
         wrest = np.zeros_like(rot_vec)[..., :2]
-        # from pdb import set_trace; set_trace()
         pose:np.ndarray = np.concatenate([translation, rot_vec, wrest, joint_value], axis=-1)
         if path is None:
             return pose
@@ -327,7 +314,6 @@ class HandModelMJCF:
         else:
             print('########################')
             temp = hand_pose[:, 9:]
-            # temp[:, 13] = - temp[:, 13]
             temp[:, 8] = - temp[:, 8]
             temp[:, 20] = - temp[:, 20]
             temp[:, 21] = - temp[:, 21]
@@ -342,7 +328,6 @@ class HandModelMJCF:
         else:
             self.global_rotation = rotation_6d_to_matrix_ori(self.hand_pose[:, 3:9])
         self.current_status = self.chain.forward_kinematics(temp)
-        # print(self.current_status['robot0:thdistal_child'].get_matrix().shape)
 
 
     def get_trimesh_data(self, i):
@@ -407,8 +392,6 @@ class HandModelMJCF:
             tt = trimesh.ray.ray_pyembree.RayMeshIntersector(hand_mesh)
             _, index_ray0 = tt.intersects_id(ray_origins=points, ray_directions=oritation, multiple_hits=True, return_locations=False)
             _, index_ray1 = tt.intersects_id(ray_origins=points, ray_directions=-oritation)
-            print(index_ray0)
-            print(index_ray0.shape)
             count0 = np.bincount(index_ray0)
             count1 = np.bincount(index_ray1)
             bool_0 = count0 % 2 != 0
@@ -535,4 +518,3 @@ if __name__ == '__main__':
     hand.set_parameters(motion)
     
     bool = hand.cal_distance(points)
-    print(bool.shape)

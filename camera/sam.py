@@ -99,7 +99,6 @@ class Sam_Detector():
         area = [np.sum(mask) for mask in masks]
         mask = masks[np.argmax(area)]
         mask = self.refine_mask(mask, input_point, input_label, step_add_num=4, opt_step=4)
-        print(mask.shape)
         return mask
         
 if __name__ == "__main__":

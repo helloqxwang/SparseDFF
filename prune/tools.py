@@ -38,106 +38,6 @@ def pt_vis(points:np.ndarray, size=None):
 
     return
 
-def mesh2rgbd(mesh_path:list , device=torch.device('cuda'), scale=1.4, num=20, img_size=256):
-    """smampling the mesh to rgbd images
-
-    Args:
-        mesh_path (list): the path of a mesh file
-        device (_type_): the device to run the model
-        num (int, optional): the number of views. Defaults to 20.
-        img_size (int, optional): the size of the image. Defaults to 512.
-
-    Returns:
-        images, depths: torch.tensor of shape (N, H, W, 3) and (N, H, W)
-        c21, K: np.ndarray of shape (N, 4, 4) and (N, 3, 3)
-        camera_params: dict of camera parameters
-
-    """
-    ### add a texture to the mesh
-    mesh = load_objs_as_meshes(mesh_path, device=device)
-    verts = mesh.verts_list()[0]
-    rot = Rotation.from_euler('zyx', [np.pi, 0, - np.pi/2], degrees=False)
-    matrix = torch.tensor(rot.as_matrix(), dtype=verts.dtype).to(device)
-    verts = (matrix @ verts.T).T
-
-    mesh.verts_list()[0] = verts * 1.4
-    tex = torch.ones_like(verts)[None, ...].to(device)  # (1, V, 3)
-    mesh.textures = TexturesVertex(verts_features=tex)
-
-    meshes = mesh.extend(num)
-    elev = 30
-    azim = torch.linspace(-180, 180, num + 1)[:-1]
-    ### R is the pytorch3d2world rotation matrix, T is the world2pytorch3d translation
-    R, T = look_at_view_transform(dist=0.91, elev=elev, azim=azim)
-
-    cameras = FoVPerspectiveCameras(device=device, R=R, T=T)
-    raster_settings = RasterizationSettings(
-        image_size=img_size, 
-        bin_size=0,
-        blur_radius=0.0, 
-        faces_per_pixel=1, 
-    )
-    lights = PointLights(device=device, location=[[0.0, 0.0, -3.0]])
-    renderer = MeshRenderer(
-        rasterizer=MeshRasterizer(
-            cameras=cameras, 
-            raster_settings=raster_settings
-        ),
-        shader=SoftPhongShader(
-            device=device, 
-            cameras=cameras,
-            lights=lights
-        )
-    ) 
-
-    # We can pass arbitrary keyword arguments to the rasterizer/shader via the renderer
-    # so the renderer does not need to be reinitialized if any of the settings change.
-    images = renderer(meshes, cameras=cameras, lights=lights)
-    fragments = renderer.rasterizer(meshes, cameras=cameras)
-    depths = fragments.zbuf.mean(dim=-1)
-
-    fx = fy = img_size / (2 * np.tan(np.pi / 3 / 2))
-    cx = cy = img_size / 2
-    ### construct the Inrinsics matrix
-    K = np.asarray([
-     [fx,  0, cx],
-     [ 0, fy, cy],
-     [ 0,  0,  1]])
-    camera_params = {'fx': fx, 'fy': fy, 'cx': cx, 'cy': cy, 'xres': img_size, 'yres': img_size}
-    ### construct the homogeneous coordinates
-    # camera coordinates to pytorch3d camera coordinates
-    c2c_pytorch3d = np.eye(4)
-    c2c_pytorch3d[0, 0] = -1
-    c2c_pytorch3d[1, 1] = -1
-    # world coordinates to pytorch3d camera coordinates
-    w2c_pytorch3d = np.eye(4)[None, ...].repeat(num, axis=0)
-    w2c_pytorch3d[:, :3, :3] = R.mT
-    w2c_pytorch3d[:, :3, 3] = T
-    # camera coordinates to world coordinates
-    c2w = np.linalg.inv(w2c_pytorch3d) @ c2c_pytorch3d
-
-    return images[..., :3], depths, c2w, K, camera_params
-
-def load_dataset_img(path, load:list, device='cuda'):
-    """load imgs from npy files and return them as torch tensors
-
-    Args:
-        path (_type_): _description_
-        num (int, optional): _description_. Defaults to 1.
-        device (str, optional): _description_. Defaults to 'cuda'.
-    Return:
-        [num, height, width, channels]
-    """
-    npy_files = glob.glob(os.path.join(path, '*.npy'))
-    img_ls = []
-    for i in range(min(len(load), len(npy_files))):
-        # Load the i-th image
-        img = np.load(npy_files[load[i]])
-        img = torch.from_numpy(img).to(device)
-        img_ls.append(img)
-    imgs = torch.stack(img_ls, dim=0)
-    return imgs
-
 def save_imgs(path_, imgs):
     """save the images to the path_/images/
     """
@@ -497,7 +397,7 @@ def depth2pt_K_numpy(depths:np.ndarray, K:np.ndarray , R:np.ndarray, xyz_images=
     if xyz_images:
         return xyz_img_trans[..., :3]
     else:
-        batch_sign = np.zeros((batch_size, h, w)).to(device)
+        batch_sign = np.zeros((batch_size, h, w))
         for i in range(batch_size):
             batch_sign[i] = i + 1
         zero_filter = (depths != 0).reshape(-1)
@@ -572,64 +472,6 @@ def get_matched_pt_ft(imgs:torch.Tensor, depths:torch.Tensor, points:torch.Tenso
         match_features.append(match_feature)
     return torch.cat(match_points, dim=0), torch.cat(match_features, dim=0)
 
-def features_cache(func):
-
-    def wrapper(imgs, scale, key=0, img_num=0, img_size=224, name='bunny'):
-        dr_path = os.path.join('/home/user/wangqx/stanford/cache_data', '{}_{}'.format(name, key))
-        os.makedirs(dr_path, exist_ok=True)
-        dd_path = os.path.join(dr_path, 'feats{}_{}_{}_dino.npy'.format(img_num, img_size, scale))
-        print(dd_path)
-        if os.path.exists(dd_path):
-            features = np.load(dd_path)
-            features = torch.from_numpy(features).to(torch.device('cuda'))
-        else:
-            torch.hub.set_dir( "/home/user/wangqx/stanford/")
-            model = torch.hub.load('/home/user/wangqx/stanford/Learning_based_method/dinov2', 'dinov2_vitb14', source='local', pretrained=False).cuda()
-            model.load_state_dict(torch.load('/home/user/wangqx/ndf_robot/dinov2_vitb14_pretrain.pth'))
-            if isinstance(imgs, np.ndarray):
-                features = func(model, imgs, scale)
-            else:
-                features = func(model, imgs.cpu().numpy(), scale)
-            np.save(dd_path, features.cpu().numpy())
-        return features
-    return wrapper
-
-@features_cache
-def get_features(model, imgs:np.ndarray, scale:int=4, name='bunny')->torch.Tensor:
-    """
-    the imgs should be of shape (N, H, W, 3)
-
-    Args:
-        model (_type_): the dinov2 model
-        rgb (_type_): a stack of rgb images
-        scale (int, optional): the scale to shrink the imgs. Defaults to 4.
-
-    Returns:
-        _type_: torch.Tensor of shape (N, H, W, F)
-    """
-    imgs = skimage.img_as_float32(imgs)
-    feat_ls = []
-    for rgb in imgs:
-        img_raw = skimage.transform.resize(
-                rgb,
-                (rgb.shape[0] // 14 * 14 , rgb.shape[1] // 14 * 14 )
-            )
-        imgs = torch.from_numpy(img_raw)
-        imgs = imgs[None, :].cuda()
-        # print('img.shape', imgs.shape)
-        with torch.no_grad():
-            ### (batch size, 3, height, width)
-            ret = model.forward_features(imgs.permute(0, 3, 1, 2))
-        features = ret['x_norm_patchtokens']
-        N, _, F = features.shape
-        ### (height, width, features) torch.Tensor np.float32
-        features = features.reshape(imgs.shape[1] // 14, imgs.shape[2] // 14, F).permute(2, 0, 1)
-        features = torch.nn.functional.interpolate(features.unsqueeze(0), size=(rgb.shape[0] // scale , rgb.shape[1] // scale ), mode='bilinear', align_corners=False)
-        features = features.squeeze(0).permute(1, 2, 0)
-        feat_ls.append(features)
-    features = torch.stack(feat_ls, dim=0)
-    return features
-
 def get_dino_features(img_raw:np.ndarray, scale:int=3)->torch.Tensor:
     """get dino features for only one img
 
@@ -652,12 +494,10 @@ def get_dino_features(img_raw:np.ndarray, scale:int=3)->torch.Tensor:
             ).astype('float32')
     img = torch.from_numpy(img)
     img = img[None, :].cuda()
-    print('Picture for Dino size:', img.shape)
-    # print('img.shape', imgs.shape)
+    # print('Picture for Dino size:', img.shape)
     with torch.no_grad():
         ### (batch size, 3, height, width)
         ret = model.forward_features(img.permute(0, 3, 1, 2))
-    # from pdb import set_trace; set_trace()
     features = ret['x_norm_patchtokens']
     N, _, F = features.shape
     ### (height, width, features) torch.Tensor np.float32
@@ -666,45 +506,6 @@ def get_dino_features(img_raw:np.ndarray, scale:int=3)->torch.Tensor:
     features = features.squeeze(0).permute(1, 2, 0)
     return features
 
-
-def downsample(pc:torch.Tensor, res=0.005):
-    """Down sample the point cloud using o3d voxel_down_sample_and_trace
-
-    Args:
-        pc (torch.Tensor): The point cloud to be downsampled (num, 3)
-        res (int): _description_
-
-    Returns:
-        down_sampled_pt (torch.Tensor): The downsampled point cloud (num, 3)
-        index (np.ndarray): The index of the downsampled points in the original point cloud
-    """
-    device = pc.device
-    pcd = o3d.geometry.PointCloud()
-    pcd.points = o3d.utility.Vector3dVector(pc.cpu().numpy())
-    _, _, idxs = pcd.voxel_down_sample_and_trace(res, pcd.get_min_bound(), pcd.get_max_bound())
-    res = []
-    for idx in idxs:
-        res.append(np.random.choice(np.array(idx)))
-    index = np.array(res)
-    down_sampled_pt = torch.Tensor(pc[index]).to(device)
-    return down_sampled_pt, index
-
-def prune_sphere(points:torch.Tensor, center:torch.Tensor, radius:int = 0.3)->(torch.Tensor, torch.Tensor):
-    """prune the useless points outside a shpere
-
-    Args:
-        points (torch.Tensor): (num, 3)
-        center (torch.Tensor): (3, )
-        center (int, optional): _description_. Defaults to 0.3)
-
-    Returns:
-        pruned_points: _description_
-        index: the index of the pruned points in points
-    """
-
-    distence = torch.norm((points-center), p=2, dim=-1)
-    index = distence < radius
-    return points[index], index
 
 def prune_box(points:torch.Tensor, x:list, y:list, z:list):
     """prune the useless points outside a box
@@ -722,21 +523,3 @@ def prune_box(points:torch.Tensor, x:list, y:list, z:list):
     index = (points[:, 0] > x[0]) & (points[:, 0] < x[1]) & (points[:, 1] > y[0]) & (points[:, 1] < y[1]) & (points[:, 2] > z[0]) & (points[:, 2] < z[1])
     return points[index], index
 
-if __name__ == '__main__':
-    os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
-    key = 0
-    mesh_path = '/home/user/wangqx/stanford/bunnyQ_Attack1_{}.obj'.format(key)
-    device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-    img_num = 4
-    scale = 4
-    img_size = 1024
-    imgs, depths_ori, c2w, K, camera_params = mesh2rgbd([mesh_path], device, num=img_num, img_size=img_size)
-    print('#############')
-    features = get_features(imgs, scale, key, img_num, img_size=img_size)
-    n, h, w, c= features.shape
-    depths = torch.from_numpy(np.array([cv2.resize(depth, (h , w), interpolation=cv2.INTER_NEAREST) for depth in depths_ori.cpu().numpy()])).to(device)
-    points = depth2pt(depths, camera_params, torch.from_numpy(c2w).to(device).to(torch.float32), device=device)
-    match_points, match_features = get_matched_pt_ft(features, depths, points, device=device)
-    print('match_points.shape: ', match_points.shape)
-    pt_vis(match_points.cpu().numpy())
-    

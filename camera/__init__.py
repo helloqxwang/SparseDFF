@@ -4,7 +4,7 @@ from .camera_tools import get_extrinsics_from_json, load_color_pc,\
 transform_points, vis_color_pc, save_colorpc, vis_img, load_depths,\
 load_cddi
 from .capture_3d import capture_auto
-from prune.tools import downsample, depth2pt_K_numpy, get_dino_features
+from prune.tools import  depth2pt_K_numpy, get_dino_features
 from typing import List
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import minmax_scale
@@ -60,23 +60,6 @@ def get_distort_points(path:str, extrinsics:np.ndarray)->(np.ndarray, np.ndarray
     points_trans = transform_points(points, extrinsics)
     return points_trans, colors
 
-# def down_sample_color_depth(depths:np.ndarray, colors:np.ndarray, downsample_size:tuple=(980,700))->(np.ndarray, np.ndarray):
-#     """down sample the points and colors
-
-#     Args:
-#         depths (np.ndarray): (n, h, w)
-#         colors (np.ndarray): (n, h, w, 3)
-#         downsample_size (tuple): the down_sampled size of each image
-#     Returns:
-#         depths_downsample: (n, h', w')
-#         colors_downsample: (n, h', w', 3)
-#     """
-#     h_ = (depths.shape[1] - downsample_size[0]) // 2
-#     w_ = (depths.shape[2] - downsample_size[1]) // 2
-#     depths_downsample = depths[:, h_:-h_, w_:-w_]
-#     colors_downsample = colors[:, h_:-h_, w_:-w_, :]
-#     return depths_downsample, colors_downsample
-
 def get_index_from_range(points:np.ndarray, x=[-420, 420], y=[-560, 560], z=[-200, 800], return_mask:bool = False)->np.ndarray:
     """get the index of the points in the range
 
@@ -108,7 +91,7 @@ def line_dist(points:torch.tensor, line:torch.tensor)->torch.tensor:
         dist = np.matmul(points, line[:-1].reshape(3, 1)) + line[-1]
         return dist.squeeze()
 
-def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, name = 'mm', prune_method='sam', key:int=0)->(np.ndarray, np.ndarray, np.ndarray):
+def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, name = 'mm', prune_method='sam', key:int=0, verbose:bool=True)->(np.ndarray, np.ndarray, np.ndarray):
     """
     the pipeline of the data loading/capturing then processing
     
@@ -137,15 +120,11 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
         colors, depths = undistort(colors_distort, depths_distort ,intrinsics, distortion) 
     else:
         points_distort, colors_distort, depths_distort, intrinsics, distortion = capture_auto(save=save, name = name)
-        # intrinsics, distortion = get_intrinsics_distortion_from_npy('/home/user/wangqx/stanford/kinect/workspace/', standard=False)
         colors, depths = undistort(colors_distort, depths_distort, intrinsics, distortion)
 
-    # points = depth2pc(depths, np.linalg.inv(extrinsics), intrinsics)
-    # vis_color_pc(points_distort.reshape(-1, 3), colors.reshape(-1, 3)) 
     colors_pile = colors[..., (2, 1, 0)]
     depths[depths < 0] = 0
     points_undistort = depth2pt_K_numpy(depths, intrinsics, np.linalg.inv(extrinsics), xyz_images=True)
-    # vis_color_pc(points_undistort.reshape(-1, 3), colors.reshape(-1, 3)) 
     detector = Sam_Detector()
     points_ls = []
     features_ls = []
@@ -159,29 +138,18 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
 
         if prune_method == 'sam':
             posi_num = 4
-            # from pdb import set_trace; set_trace()
-            # posi_index = get_index_from_range(points, x=[-30, 30], y = [-30, 30], z=[10, 1200])
             posi_index = get_index_from_range(points, x=[-200, 200], y = [-200, 200], z=[20, 1200])
-            # posi_num = 6
-            # posi_index = get_index_from_range(points, x=[-50, 50], y = [-250, 250], z=[20, 1200])
             posi_select_id = np.random.choice(len(posi_index[0]), posi_num // 2)
             posi_index_ = get_index_from_range(points, x=[-200, 200], y = [-200, 200], z=[5, 20])
-            posi_select_id_ = np.random.choice(len(posi_index[0]), posi_num // 2)
+            posi_select_id_ = np.random.choice(len(posi_index_[0]), posi_num // 2)
             
             
             posi_select_id = np.concatenate([posi_select_id, posi_select_id_])
             posi_index = np.array([[posi_index[1][i], posi_index[0][i]] for i in posi_select_id])
             
 
-            neg_num = 2 # 4
-            # neg_index = get_index_from_range(points, x=[-400, -360], y = [-300, 300], z=[-150, 1200])
+            neg_num = 2 
             if key == 0:
-                # neg_index = get_index_from_range(points, x=[-80, 80], y = [-80, 80], z=[10, 60])
-                # if neg_index[0].shape[0] < neg_num:
-                #     neg_index = get_index_from_range(points, x=[-400, 400], y = [- 410, - 460], z=[-150, 900])
-                # neg_index = get_index_from_range(points, x=[-80, 80], y = [-80, 80], z=[0, 90])
-                # if neg_index[0].shape[0] < neg_num:
-                #     neg_index = get_index_from_range(points, x=[-400, 400], y = [- 410, - 460], z=[-150, 900])
                 neg_index = get_index_from_range(points, x=[-400, 400], y = [320, 460], z=[-20, 20])
                 if neg_index[0].shape[0] < neg_num:
                     neg_index = get_index_from_range(points, x=[-400, 400], y = [- 370, - 460], z=[-150, 900])
@@ -190,25 +158,25 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
                 if neg_index[0].shape[0] < neg_num:
                     neg_index = get_index_from_range(points, x=[-400, 400], y = [- 370, - 460], z=[-150, 900])
             else:
-                exit()
+                raise NotImplementedError
             neg_select_id = np.random.choice(len(neg_index[0]), neg_num)
             neg_index = np.array([[neg_index[1][i], neg_index[0][i]] for i in neg_select_id])
 
             ref_points = np.concatenate([posi_index, neg_index], axis=0)
             labels = np.array([1, 0]).repeat([posi_num, neg_num])
-            print('Color size:', colors.shape)
+            if verbose:
+                print('Color size:', colors.shape)
             mask_sam = detector.get_mask(colors, ref_points, labels)
-            vis_mask_image(colors, mask_sam, ref_points, labels, save_path=f'/home/user/wangqx/stanford/data/sam{idx}.png')
+            vis_mask_image(colors, mask_sam, ref_points, labels, save_path=f'./data/sam{idx}.png')
             
             mask_physics = get_index_from_range(points, return_mask=True)
             mask = mask_sam & mask_physics
-            # get the bounding box from mask
             index = np.nonzero(mask)
         elif prune_method == 'pyhsics':
             mask_physics = get_index_from_range(points, x=[-455, 455], y=[-545, 545], z=[-200, 800],return_mask = True)
             mask = (depth!=0) & mask_physics
             index = np.nonzero(mask)
-            vis_mask_image(colors, mask, None, None, save_path=f'/home/user/wangqx/stanford/data/physics{idx}.png')
+            vis_mask_image(colors, mask, None, None, save_path=f'./data/physics{idx}.png')
         else:
             raise NotImplementedError
         
@@ -224,15 +192,16 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
 
         features:torch.tensor = get_dino_features(pruned_colors, scale=scale)
 
-        cv2.imwrite(f'/home/user/wangqx/stanford/data/dino_color{idx}.png', pruned_colors[..., (2, 1, 0)])
-        np.save(f'/home/user/wangqx/stanford/data/dino_features{idx}.npy', features.cpu().numpy())
+        cv2.imwrite(f'./data/dino_color{idx}.png', pruned_colors[..., (2, 1, 0)])
+        np.save(f'./data/dino_features{idx}.npy', features.cpu().numpy())
         downsampled_points = cv2.resize(prune_points, (w, h), interpolation=cv2.INTER_NEAREST)
         downsampled_colors = cv2.resize(pruned_colors, (w, h), interpolation=cv2.INTER_NEAREST)
         downsampled_mask = cv2.resize(pruned_mask, (w, h), interpolation=cv2.INTER_NEAREST).astype('bool')
         downsample_depth = cv2.resize(pruned_depth, (w, h), interpolation=cv2.INTER_NEAREST)
         downsampled_mask = downsampled_mask & (downsample_depth != 0)
-        print('Downsampled mask size:', downsampled_mask.shape)
-        print('features size:', features.shape)
+        if verbose:
+            print('Downsampled mask size:', downsampled_mask.shape)
+            print('features size:', features.shape)
 
         masked_features = features[torch.from_numpy(downsampled_mask)]
         masked_points = downsampled_points[downsampled_mask]
@@ -249,7 +218,6 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
             plane = np.array(plane_model) / np.linalg.norm(plane_model[:3])
             dist_plane = line_dist(masked_points, plane)
             distance = 20
-            # from pdb import set_trace; set_trace()
             if np.count_nonzero(dist_plane < - distance) > np.count_nonzero(dist_plane >  distance):
                 ### make sure the norm_vec of the plane point to the bear side
                 plane = - plane

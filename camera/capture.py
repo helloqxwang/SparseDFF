@@ -1,9 +1,6 @@
 import argparse
 from pathlib import Path
-
 from tqdm import tqdm
-import time
-
 from manager import MultiCameraManager
 
 

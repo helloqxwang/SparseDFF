@@ -1,8 +1,5 @@
 import torch
 import numpy as np
-import os
-import cv2
-from prune.tools import mesh2rgbd, get_features, depth2pt, pt_vis
 
 def find_match_3D(points:torch.Tensor, img_sign:torch.Tensor, img_num, dis_threshold=0.005, both_left_right=False, lonely_bonus=True):
     """Calculate the “matchbility" of every point.
@@ -30,13 +27,11 @@ def find_match_3D(points:torch.Tensor, img_sign:torch.Tensor, img_num, dis_thres
     right_match = torch.zeros((img_sign.shape[0] +1), dtype=torch.long).to(points.device)
     right_match[-1] = right_match.shape[0] - 1
     img_sign_expand = torch.cat((img_sign, torch.tensor([img_num + 1]).to(img_sign.device)))
-    # from pdb import set_trace; set_trace()
 
     for index in range(1, img_num+1):
         points_ori = points[img_sign==index]
         # (num0, num)
         dis = torch.cdist(points_ori.unsqueeze(0).to(torch.float32), points.unsqueeze(0).to(torch.float32), p=2).squeeze(0)
-        # print(dis.max())
         print(dis.median())
         filter_left = torch.logical_and((dis<dis_threshold), (img_sign==near_index(index, img_num)[0]).unsqueeze(0))
         filter_right = torch.logical_and((dis<dis_threshold), (img_sign==near_index(index, img_num)[1]).unsqueeze(0))
@@ -101,13 +96,11 @@ def find_match_3D_quotient(points:torch.Tensor, img_sign:torch.Tensor, img_num, 
     left_quotient = torch.zeros((img_sign.shape[0]), dtype=torch.bool).to(points.device)
     right_quotient = torch.zeros((img_sign.shape[0]), dtype=torch.bool).to(points.device)
     img_sign_expand = torch.cat((img_sign, torch.tensor([img_num + 1]).to(img_sign.device)))
-    # from pdb import set_trace; set_trace()
 
     for index in range(1, img_num+1):
         points_ori = points[img_sign==index]
         # (num0, num)
         dis = torch.cdist(points_ori.unsqueeze(0).to(torch.float32), points.unsqueeze(0).to(torch.float32), p=2).squeeze(0)
-        # print(dis.max())
         print(dis.median())
         filter_left = torch.logical_and((dis<dis_threshold), (img_sign==near_index(index, img_num)[0]).unsqueeze(0))
         filter_right = torch.logical_and((dis<dis_threshold), (img_sign==near_index(index, img_num)[1]).unsqueeze(0))
@@ -154,10 +147,8 @@ def vote_3D(points:torch.Tensor, img_sign:torch.Tensor, img_num, dis_threshold=0
     ballot_box = torch.zeros((img_sign.shape[0]), dtype=torch.long).to(points.device)
 
     for index in range(1, img_num+1):
-        # calculate the votes per image)
+        # calculate the votes per image
         points_ori = points[img_sign==index]
-        # (num0, )
-        image_ballot = torch.zeros((points_ori.shape[0]), dtype=torch.long).to(points.device)
         # (num0, num)
         dis = torch.cdist(points_ori.unsqueeze(0).to(torch.float32), points.unsqueeze(0).to(torch.float32), p=2).squeeze(0)
         # (num0, )
@@ -175,30 +166,9 @@ def vote_3D(points:torch.Tensor, img_sign:torch.Tensor, img_num, dis_threshold=0
         values = torch.ones_like(min_index).to(points.device)
         ballot_box.index_add_(0, min_index, values)
 
-    # from pdb import set_trace; set_trace()
     sort_index = torch.argsort(ballot_box, descending=True)
-    # selected_num = 300
     selected_index = sort_index[:selected_num]
     marker = torch.zeros(points.shape[0], dtype=torch.bool)
     marker[selected_index] = True
     selected_points = points[marker]
     return selected_points, marker
-
-if __name__ == '__main__':
-    os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
-    key = 0
-    mesh_path = '/home/user/wangqx/stanford/bunnyQ_Attack1_{}.obj'.format(key)
-    device = torch.device('cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-    img_num = 4
-    scale = 4
-    img_size = 1024
-    imgs, depths_ori, c2w, K, camera_params = mesh2rgbd([mesh_path], device, num=img_num, img_size=img_size)
-    print('#############')
-    features = get_features(imgs, scale, key, img_num, img_size=img_size)
-    n, h, w, c= features.shape
-    depths = torch.from_numpy(np.array([cv2.resize(depth, (h , w), interpolation=cv2.INTER_NEAREST) for depth in depths_ori.cpu().numpy()])).to(device)
-    points, batch_sign, filter_depth = depth2pt(depths, camera_params, torch.from_numpy(c2w).to(device).to(torch.float32), xyz_images=False, device=device)
-    threshold = 0.005
-    points_select, index_select= find_match_3D(points, batch_sign, img_num, dis_threshold=threshold)
-    print(points_select.shape)
-    pt_vis(points_select.cpu().numpy(), size=threshold)

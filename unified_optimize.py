@@ -3,31 +3,12 @@ import numpy as np
 import time
 import random
 import argparse
-from scipy.spatial.transform import Rotation
-from prune import get_points_features_from_mesh, get_points_features_from_real
+from prune import get_points_features_from_real
 from optimize.alignment import Hand_AlignmentCheck, Gripper_AlignmentCheck
-import cv2
-import open3d as o3d
-import skimage
 import os
-# Util function for loading meshes
-from pytorch3d.io import load_objs_as_meshes, load_obj
-from pytorch3d.structures import Meshes
-from pytorch3d.renderer import (
-    look_at_view_transform,
-    FoVPerspectiveCameras, 
-    PointLights, 
-    DirectionalLights, 
-    Materials, 
-    RasterizationSettings, 
-    MeshRenderer, 
-    MeshRasterizer,  
-    SoftPhongShader,
-    TexturesUV,
-    TexturesVertex,
-  
-)
 from omegaconf import DictConfig, OmegaConf, open_dict
+from pyvirtualdisplay import Display
+import pyglet
 
 class home_made_feature_interpolator:
 
@@ -48,8 +29,6 @@ class home_made_feature_interpolator:
                 self.dev = torch.device('cpu')
         self.sigma = 0.01
         self.points = torch.from_numpy(points).to(torch.float32).to(self.dev)
-        print('points_mean:', self.points.mean(dim=0))
-        # self.points = self.points - self.points.mean(dim=0)
         self.features = torch.from_numpy(features).to(torch.float32).to(self.dev)
     
     def get_points(self)->np.ndarray:
@@ -68,32 +47,16 @@ class home_made_feature_interpolator:
         dim = self.points.shape[1]
         b, n, _ = query_points.shape
         query_points = query_points.reshape(-1, dim)
-        num_points = self.points.shape[0]
-        num_query_points = query_points.shape[0]
-        # show_pc(self.points.cpu().detach().numpy(), query_points.cpu().detach().numpy())
-        
-        # 扩展points和query_points，使其shape变为(num_query_points, num_points, dim)
-        # points_exp = self.points.unsqueeze(0).repeat((num_query_points, 1, 1))
-        # query_points_exp = query_points.unsqueeze(1).repeat((1, num_points, 1))
         points_exp = self.points[None, :, :]
         query_points_exp = query_points[:, None, :]
         
-        # 计算query_points和points之间的欧氏距离，shape为(num_query_points, num_points)
-        # dist min max 0.2 0.6
         dists = torch.norm((points_exp - query_points_exp), dim=-1)
         if dists.isnan().any():
-            # from pdb import set_trace;set_trace()
             raise ValueError('nan in dists')
 
-        # from torch.distributions.normal import Normal
-        # gau = Normal(0, self.sigma)
-        # weights = gau.log_prob(dists)
         weights = 1 / (dists + 1e-10)**2
         if weights.isnan().any():
             raise ValueError('nan in weights')
-        
-        # 对每个query_point，计算其特征的加权平均，shape为(num_query_points, num_features)
-        # print(weights.dtype, self.features.dtype)
         if self.features.isnan().any():
             raise ValueError('nan in self.features')
         interpolated_features = torch.mm(weights, self.features) / torch.sum(weights, dim=1, keepdim=True)
@@ -162,8 +125,9 @@ class Dino_Processor:
         alignment.sample_pts()
 
 if __name__ == '__main__':
-    # torch.autograd.set_detect_anomaly(True)
     start_time = time.time()
+    os.makedirs('./data', exist_ok=True)
+    os.makedirs('./visualize', exist_ok=True)
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--config', type=str, default='./config.yaml')
     argparser.add_argument('--name', type=str, default='m0')
@@ -171,6 +135,11 @@ if __name__ == '__main__':
     base_conf = OmegaConf.load(args.config)
     cli_conf = OmegaConf.from_cli()
     conf = OmegaConf.merge(base_conf, cli_conf)
+    if conf.visualize == False:
+        display = Display(visible=0, size=(1024, 768))
+        display.start()
+        pyglet.options['shadow_window'] = False
+        pyglet.options['display'] = display.display
     dino_processor = Dino_Processor(conf, args.name, conf.mode)
     dino_processor.process()
     end_time = time.time()
