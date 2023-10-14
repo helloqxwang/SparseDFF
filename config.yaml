@@ -1,18 +1,18 @@
 seed: 1
 device: null
-visualize: false
+visualize: false # visualize results using trimesh
 verbose: false
 extrinsics_path: ./camera/workspace/calibration.json
-data1: /home/user/wangqx/stanford/kinect/data/20230929_150633
-data2: /home/user/wangqx/stanford/kinect/data/20230929_150633
-model_path: null
+data1: /home/user/wangqx/stanford/kinect/data/20230929_150633 # reference
+data2: /home/user/wangqx/stanford/kinect/data/20230929_150633 # test
+model_path: null 
 img_preprocess: 
   - sam
   - sam
 scale: 14
 dis_threshold: 0.1
 quotient_threshold: 0.8
-method: vote_3D
+method: vote_3D # prune method
 mode: hand
 hand_model:
   tip_aug: 4

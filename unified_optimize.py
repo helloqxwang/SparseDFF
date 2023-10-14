@@ -130,7 +130,7 @@ if __name__ == '__main__':
     os.makedirs('./visualize', exist_ok=True)
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--config', type=str, default='./config.yaml')
-    argparser.add_argument('--name', type=str, default='m0')
+    argparser.add_argument('--name', type=str, default='test')
     args = argparser.parse_args()
     base_conf = OmegaConf.load(args.config)
     cli_conf = OmegaConf.from_cli()
