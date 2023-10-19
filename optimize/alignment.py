@@ -8,12 +8,81 @@ import plotly.graph_objects as go
 import open3d as o3d
 from optimize.hand_model import HandModelMJCF
 from optimize.gripper_model import GripperModel
-from scipy.spatial.transform import Rotation as R
-
+from scipy.spatial.transform import Rotation 
+import yaml
 from matplotlib import cm
-from camera.camera_tools import vis_color_pc
-from camera.camera_tools import read_hand_arm
 from optimize.hand_model import robust_compute_rotation_matrix_from_ortho6d
+
+def read_tranformation(data_path:str='/home/user/wangqx/stanford/kinect/tranform.yaml'):
+    with open(data_path, 'r') as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    position = np.array([data['pose']['position']['x'], data['pose']['position']['y'], data['pose']['position']['z']])
+    quaternion = np.array([data['pose']['orientation']['x'], data['pose']['orientation']['y'], data['pose']['orientation']['z'], data['pose']['orientation']['w']])
+    table2cam = np.eye(4)
+    table2cam[:3, 3] = position
+    table2cam[:3, :3] = Rotation.from_quat(quaternion).as_matrix()
+    cam2base_str:str = data['cam2base']
+    cam2base_str = cam2base_str.replace('[', '').replace(']', '').replace('\n', '')
+    cam2base = np.array([float(i) for i in cam2base_str.split()]).reshape(4, 4)
+    return table2cam, cam2base
+
+
+def read_hand_arm(forder_path:str='/home/user/wangqx/stanford/kinect/hand_arm', name=None):
+    """
+    read the hand and arm points from the forder
+
+    Args:
+        forder_path (str, optional): path. Defaults to '/home/user/wangqx/stanford/kinect/hand_arm'.
+
+    Returns:
+        np.ndarray: shape (n, 1, 3 + 6 + hand_dofs) n is the number of poses
+    """
+    file_ls = os.listdir(forder_path)
+    hand_path_ls:list = [item for item in file_ls if 'hand' in item]
+    arm_path_ls:list = [item for item in file_ls if 'arm' in item]
+    pose_ls = []
+    for i in range(len(hand_path_ls)):
+        hand_path = os.path.join(forder_path, hand_path_ls[i])
+        arm_path = os.path.join(forder_path, arm_path_ls[i])
+        hand = np.load(hand_path)
+        arm = np.load(arm_path)
+        posi = arm[:3]
+        rot_matrix = Rotation.from_rotvec(arm[3:]).as_matrix()
+        # this is in the base_link frame (TCP2baselink)
+        rot_m = np.eye(4)
+        rot_m[:3, :3] = rot_matrix
+        rot_m[:3, 3] = posi
+
+        baselink2base = np.eye(4)
+        baselink2base[:3, :3] = Rotation.from_euler('xyz', [0, 0, np.pi]).as_matrix()
+        rot_m = baselink2base @ rot_m
+
+
+        table2cam, cam2base = read_tranformation()
+        base2world = np.linalg.inv(table2cam) @ np.linalg.inv(cam2base)
+        # this is in the world frame (TCP2world)
+        rot_m = base2world @ rot_m
+
+        # hand2EE
+        hand2EE = np.eye(4)
+        hand2EE[:3, :3] = Rotation.from_euler('xyz', [0, 0, np.pi]).as_matrix()
+        hand2EE[:3, 3] = [0, -0.01, 0.247]
+        rot_m = rot_m @ hand2EE 
+
+
+        rot_world = rot_m[:3, :3]
+        posi_world = rot_m[:3, 3]
+
+        a1 = rot_world[0]
+        a2 = rot_world[1]
+        rot_6d = np.concatenate([a1, a2])
+        hand_pose = np.concatenate([posi_world, rot_6d, hand[2:]])[None, :]
+        pose_ls.append(hand_pose)
+    poses = np.stack(pose_ls, axis=0)
+    if name is not None:
+        idx = hand_path_ls.index(f'hand_{name}.npy')
+        return poses[idx]
+    return poses
 
 def trimesh_show(np_pcd_list, mesh_list, color_add_list=None, color_list=None, rand_color=False, show=True, name=None):
     colormap = cm.get_cmap('brg', len(np_pcd_list))
@@ -222,7 +291,7 @@ class Hand_AlignmentCheck:
             rot_m[:, 0] = rot_sixd[:, 0:3]
             rot_m[:, 1] = rot_sixd[:, 3:6]
             rot_m[:, 2] = np.cross(rot_m[:, 0], rot_m[:, 1])
-            rot_zxy = R.from_matrix(rot_m).as_euler('zxy', degrees=False)
+            rot_zxy = Rotation.from_matrix(rot_m).as_euler('zxy', degrees=False)
             rot_ini = np.array([ 1.57079633, -1.57079633,  0.        ])[None, :]
             rot_index = np.abs(rot_zxy - rot_ini) < 0.6
             min_loss = torch.min(losses[rot_index]).item()

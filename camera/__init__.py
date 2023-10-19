@@ -1,9 +1,5 @@
 import numpy as np
 import cv2
-from .camera_tools import get_extrinsics_from_json, load_color_pc,\
-transform_points, vis_color_pc, save_colorpc, vis_img, load_depths,\
-load_cddi
-from .capture_3d import capture_auto
 from prune.tools import  depth2pt_K_numpy, get_dino_features
 from typing import List
 from sklearn.decomposition import PCA
@@ -11,6 +7,100 @@ from sklearn.preprocessing import minmax_scale
 from camera.sam import Sam_Detector, vis_mask_image
 import torch
 import open3d as o3d
+import yaml
+import json
+from scipy.spatial.transform import Rotation 
+import os
+
+CAM = {
+    "cam0": '000299113912',
+    "cam1": '000272313912',
+    "cam2": '000285613912',
+    "cam3": '000262413912',
+}
+CAM_INDEX = [CAM['cam0'], CAM['cam1'], CAM['cam2'], CAM['cam3']]
+
+def load_cddi(data_path):
+    """load colors, depths, distortions, intrinsics from a folder contain multicamera
+
+    Args:
+        data_path (str): path
+    Return:
+        colors, depths, distortion, intrinsics (np.ndarray) (cam_num, h, w, 3) for colors
+    """
+    if not os.path.isdir(data_path):
+        raise ValueError("data_path should be a folder")
+    colors_ls, depths_ls, distortion_ls, intrinsics_ls = [], [], [], []
+    for serial_num in CAM_INDEX:
+        path = os.path.join(data_path, serial_num)
+        if not os.path.isdir(path):
+            raise ValueError(f"Cannot find {path}")
+        colors = np.load(os.path.join(path, 'colors.npy'))
+        depths = np.load(os.path.join(path, 'depth.npy'))
+        distortion = np.load(os.path.join(path, 'distortion.npy'))
+        intrinsics = np.load(os.path.join(path, 'intrinsic.npy'))
+        colors_ls.append(colors)
+        depths_ls.append(depths)
+        distortion_ls.append(distortion)
+        intrinsics_ls.append(intrinsics)
+    colors = np.stack(colors_ls, axis=0)
+    depths = np.stack(depths_ls, axis=0)
+    distortion = np.stack(distortion_ls, axis=0)
+    intrinsics = np.stack(intrinsics_ls, axis=0)
+    return colors, depths, distortion, intrinsics
+
+def read_tranformation(data_path:str='/home/user/wangqx/stanford/kinect/tranform.yaml'):
+    with open(data_path, 'r') as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    position = np.array([data['pose']['position']['x'], data['pose']['position']['y'], data['pose']['position']['z']])
+    quaternion = np.array([data['pose']['orientation']['x'], data['pose']['orientation']['y'], data['pose']['orientation']['z'], data['pose']['orientation']['w']])
+    table2cam = np.eye(4)
+    table2cam[:3, 3] = position
+    table2cam[:3, :3] = Rotation.from_quat(quaternion).as_matrix()
+    cam2base_str:str = data['cam2base']
+    cam2base_str = cam2base_str.replace('[', '').replace(']', '').replace('\n', '')
+    cam2base = np.array([float(i) for i in cam2base_str.split()]).reshape(4, 4)
+    return table2cam, cam2base
+
+
+def get_extrinsics_from_json(path:str):
+    """return the extrinsics of the four cameras 
+        world2cam0, world2cam1, world2cam2, world2cam3
+
+    Args:
+        path (str): where calibration json file is
+
+    Returns:
+        np.ndarray: extrinsics of the four cameras [world_cam] shape: (4, 4, 4)
+    """
+
+    with open(path, 'r') as f:
+        data = json.load(f)
+    cam1 = data['camera_poses']["cam1_to_cam0"]
+    cam2 = data['camera_poses']["cam2_to_cam0"]
+    cam3 = data['camera_poses']["cam3_to_cam0"]
+
+    table2cam, cam2base = read_tranformation()
+    ### we seen the table frame as the world frame
+    world_c0 = table2cam
+    world_c0[:3, 3] = world_c0[:3, 3] * 1000
+    world2base = cam2base @ world_c0
+
+    c0_c1 = np.eye(4)
+    c0_c1[:3, :3] = np.array(cam1['R']).reshape(3, 3)
+    c0_c1[:3, 3] = np.array(cam1['T']) * 1000
+    world_c1 = c0_c1 @ world_c0
+    c0_c2 = np.eye(4)
+    c0_c2[:3, :3] = np.array(cam2['R']).reshape(3, 3)
+    c0_c2[:3, 3] = np.array(cam2['T']) * 1000
+    world_c2 = c0_c2 @ world_c0
+    c0_c3 = np.eye(4)
+    c0_c3[:3, :3] = np.array(cam3['R']).reshape(3, 3)
+    c0_c3[:3, 3] = np.array(cam3['T']) * 1000
+    world_c3 = c0_c3 @ world_c0
+    extrinsics = np.stack([world_c0, world_c1, world_c2, world_c3], axis=0)
+
+    return extrinsics, world2base
 
 def get_foregroundmark(features:np.ndarray, threshold=0.3):
     """get the **foreground** mask using PCA and dino_feature
@@ -55,6 +145,9 @@ def undistort(colors:np.ndarray, depths:np.ndarray, intrinsics:np.ndarray, disto
     return colors_undistort, depths_undistort
 
 def get_distort_points(path:str, extrinsics:np.ndarray)->(np.ndarray, np.ndarray):
+    from .camera_tools import get_extrinsics_from_json, load_color_pc,\
+transform_points, vis_color_pc, save_colorpc, vis_img, load_depths,\
+load_cddi
     points, colors = load_color_pc('./data/20230815_165149', mix=False)
     points = points.reshape(points.shape[0], -1, 3)
     points_trans = transform_points(points, extrinsics)
@@ -119,6 +212,7 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
         colors_distort, depths_distort, distortion, intrinsics = load_cddi(data_path)
         colors, depths = undistort(colors_distort, depths_distort ,intrinsics, distortion) 
     else:
+        from .capture_3d import capture_auto
         points_distort, colors_distort, depths_distort, intrinsics, distortion = capture_auto(save=save, name = name)
         colors, depths = undistort(colors_distort, depths_distort, intrinsics, distortion)
 

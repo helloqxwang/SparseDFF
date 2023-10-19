@@ -14,8 +14,21 @@ By establishing coherent feature fields on both source and target scenes, we dev
 
 ## Installation
 ```
+git clone --recurse-submodules git@github.com:Halowangqx/SparseDFF.git
 conda create -n sparsedff python=3.9
-conda env update -f conda.yml
+cd ./SparseDFF/thirdparty_module/dinov2
+pip install -r requirements.txt
+cd ../pytorch_kinematics
+pip install -e .
+cd ../pytorch3d
+pip install -e .
+cd ../segment-anything
+pip install -e .
+
+<!-- sudo apt-get install libusb-1.0-0-dev
+sudo apt-get install libudev-dev -->
+sudo apt install xvfb 
+pip install open3d opencv-python scikit-image trimesh lxml pyvirtualdisplay pyglet
 ```
 
 ## Usage

@@ -6,7 +6,6 @@ from prune.tools import *
 from prune.prune_3D import find_match_3D, find_match_3D_quotient, vote_3D
 from camera import pipeline
 from typing import List
-from camera.camera_tools import vis_color_pc
 from scipy.spatial.transform import Rotation
 from refinement.model import LinearProbe, LinearProbe_Thick, LinearProbe_Juicy, LinearProbe_PerScene, LinearProbe_PerSceneThick, LinearProbe_Glayer
 

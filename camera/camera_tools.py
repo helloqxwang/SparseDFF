@@ -166,9 +166,7 @@ def get_extrinsics_from_json(path:str):
     world_c0 = table2cam
     world_c0[:3, 3] = world_c0[:3, 3] * 1000
     world2base = cam2base @ world_c0
-    
-    
-    
+
     c0_c1 = np.eye(4)
     c0_c1[:3, :3] = np.array(cam1['R']).reshape(3, 3)
     c0_c1[:3, 3] = np.array(cam1['T']) * 1000
