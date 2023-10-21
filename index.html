@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html lang="en"> 
+    <head>
+        <meta charset="UTF-8">
+
+
+        <meta name="description" content="Project website for SpareseDFF">
+        <meta name="author" content="Qianxu Wang">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="style.css?cache=77333914184988801948">
+        <link rel="icon" href="icons/sage_icon.png">
+
+        <title>SpareDFF</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <style>
+        a {
+            color: #B1040E;
+        }
+
+        a:hover {
+            color: #820000;
+            text-decoration: underline;
+        }
+
+        .body_text {
+            color: rgb(46,45,41);
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            line-height: 1.9rem;
+            font-size: 1.1rem;
+        }
+
+        .text_title {
+            color: rgb(46,45,41);
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 500;
+            line-height: 3rem;
+            font-size: 2.2rem;
+            padding-top: 20px;
+        }
+
+        .text_venue {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 500;
+            line-height: 2.0rem;
+            font-size: 1.5rem;
+            color: rgb(77, 79, 83);
+        }
+
+        .text_author {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.5rem;
+            font-size: 1.1rem;
+            color: rgb(77, 79, 83);
+        }
+
+        .text_resource {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.5rem;
+            font-size: 1.0rem;
+            color: rgb(77, 79, 83);
+        }
+
+        .text_header {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 500;
+            line-height: 2.5rem;
+            font-size: 2.0rem;
+            margin-top: 0.4rem;
+            color: rgb(140, 21, 21);
+        }
+
+        .text_subheader {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            line-height: 2.5rem;
+            font-size: 1.4rem;
+            margin-top: 0.4rem;
+            color: rgb(140, 21, 21);
+        }
+
+        .figure_caption {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.8rem;
+            font-size: 1.2rem;
+            color: rgb(77, 79, 83);
+        }
+
+        .text_reference {
+            font-family: 'Open Sans', sans-serif;
+            text-align: left;
+            font-size: 0.7em;
+            color: rgb(77, 79, 83);
+        }
+
+        .text_ack {
+            font-family: 'Open Sans', sans-serif;
+            text-align: center;
+            font-size: 0.7em;
+            color: rgb(140, 21, 21);
+        }
+
+        .teaser_grid {
+            display: grid;
+            grid-template-columns: 33% 33% 33%;
+            grid-template-rows: 1fr;
+            justify-content: center;
+            grid-auto-flow: row;
+        }
+
+        .teaser_fig {
+            max-width: 99%;
+            display: block;
+            margin-left: auto;
+  			margin-right: auto;
+
+        }
+
+        .icons {
+            height: 3.5em;
+        }
+
+
+        .big_figure {
+            max-width: 100%;
+            display: block;
+            margin: 1em auto 1em;
+        }
+
+        .median_figure {
+            max-width: 75%;
+            display: block;
+            margin: 1em auto 1em;
+        }
+
+        .color_switch {
+            background-color: rgb(255, 255, 255);
+        }
+
+        .teaser_item {
+            text-align: center;
+        }
+
+        .table_title {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: rgb(77, 79, 83);
+            text-align: center;
+        }
+
+        .table_head {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: rgb(77, 79, 83);
+            text-align: center;
+        }
+
+        .table_elem {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 300;
+            font-size: 1.0rem;
+            color: rgb(77, 79, 83);
+            text-align: center;
+            align-self: center;
+        }
+
+        .table_emph {
+            font-weight: 700;
+        }
+
+        .jumbotron {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 4px 20px 4px;
+        }
+        .jumbotron > .title {
+            font-size: 18pt;
+            color: #414446;
+            clear: both;
+            text-align: center;
+        }
+
+        .carousel-item {
+            text-align: center;
+        }
+        .carousel-caption {
+            height: 15%;
+            background: rgba(230, 230, 230, 0.9);
+        }
+
+    </style>
+
+    <body>
+    <section>
+    <div class="container">
+        <div class="row" id="title">
+            <p class="col text-center mt-4 text_title">
+                SpareDFF: Sparse-View Feature Distillation for One-Shot Dexterous Manipulation
+            </p>
+        </div>
+
+        <div class="row" id="venue">
+            <p class="col text-center text_venue">   
+            </p>
+        </div>
+
+        
+        <div class="row" id="authors">
+            <div class="col-md-12 text-center mt-2 text_author">
+                <ul class="list-inline">
+                    <li class="list-inline-item mx-2">
+                        <a href="">
+                            <p>Qianxu Wang<sup>&#127982;</sup></p>
+                        </a>
+                    </li>
+                    <li class="list-inline-item mx-2">
+                        <a href="">
+                            <p>Haotong Zhang<sup>&#127982;</sup></p>
+                        </a>
+                    </li>
+                    <li class="list-inline-item mx-2">
+                        <a href="https://cs.stanford.edu/~congyue/">
+                            <p>Congyue Deng<sup>&#127794;</sup></p>
+                        </a>
+                    </li>
+                    <li class="list-inline-item mx-2">
+                        <a href="http://qq456cvb.github.io/">
+                            <p>You Yang<sup>&#127794;</sup></p>
+                        </a>
+                    </li>
+                    <li class="list-inline-item mx-2">
+                        <a href="https://zsdonghao.github.io/">
+                            <p>Hao Dong<sup>&#127982;</sup></p>
+                        </a>
+                    </li>
+                    <li class="list-inline-item mx-2">
+                        <a href="https://yzhu.io/">
+                            <p>Yixin Zhu<sup>&#127982;+</sup></p>
+                        </a>
+                    </li>
+                    <li class="list-inline-item mx-2">
+                        <a href="https://geometry.stanford.edu/member/guibas/index.html">
+                            <p>Leonidas Guibas<sup>&#127794;+</sup></p>
+                        </a>
+                    </li>
+                    <br>
+                    (<sup>+</sup>equal advising)
+                </ul>
+                <ul class="list-inline" style="margin-top: 1rem">
+                    <li class="list-inline-item mx-3">
+                        <p><sup>&#127794;</sup>Stanford University</p>
+                    </li>
+                    <li class="list-inline-item mx-3">
+                        <p><sup>&#127982;</sup>Peking University</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+
+        <div class="row" id="resources">
+            <div class="col text-center text_resource">
+                <ul class="list-inline">
+                    <li class="list-inline-item mx-4">
+                        <a href="">
+                            <img src="icons/paper_icon.png" class="icons">
+                            <p>Paper</p>
+                        </a>
+                    </li>
+                    <li class="list-inline-item mx-4">
+                            <a href="">
+                            <img src="icons/youtube_icon.png" class="icons">
+                            <p>Video</p>
+                            </a>
+                    </li>
+                    <li class="list-inline-item mx-4">
+                        <a href="https://github.com/Halowangqx/SparseDFF.git">
+                            <img src="icons/github_icon.png" class="icons">
+                            <p>Code</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    </section>
+
+    <section class="color_switch">
+        <div class="container">
+        <div class="jumbotron" id="home">
+            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+              <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4" aria-label="Slide 5"></button>
+              </div>
+              <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="4000">
+                  <video autoplay muted loop height="400">
+                    <source src="videos/press_blender.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>"Turn on the blender."</h5>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="16000">
+                  <video autoplay muted loop height="400">
+                    <source src="videos/long_horizon_microwave.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>"Open the microwave."</h5>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="10000">
+                  <video autoplay muted loop height="400">
+                    <source src="videos/press_button_revolve.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>"Turn on/off the machine."</h5>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="6000">
+                  <video autoplay muted loop height="400">
+                    <source src="videos/lift_lid_big.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>"Lift the pod's lid."</h5>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="8000">
+                  <video autoplay muted loop height="400">
+                    <source src="videos/pull_drawer.mp4" type="video/mp4">
+                  </video>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>"Slide the drawer open."</h5>
+                  </div>
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+        </div>
+        </div>
+        <br><br>
+    </section>
+<!-- Summary -->
+    <section class="color_switch">
+        <div class="container">
+        <div class="row" id="abstract">
+            <div class="col my-3">
+                <img src="images/teaser.png" class="teaser_fig">
+                <br><br>
+
+                <p class="text_header">
+                    Summary
+                </p>
+
+                <p class="body_text">
+                    <ul>
+                    	<li class="body_text">We propose a novel framework for <b>one-shot learning</b> of dexterous manipulations, utilizing semantic scene understandings distilled into 3D feature fields.</li>
+                    	<li class="body_text">We develop an efficient methodology for extracting <b>view-consistent 3D features</b> from 2D image models, incorporating a lightweight feature refinement network and a point pruning mechanism. This enables the direct application of our network to novel scenes to predict consistent features without any modifications or fine-tuning.</li>
+                    	<li class="body_text">Extensive real-world experiments with a dexterous hand validate our method, demonstrating robustness and superior <b>generalization</b> capabilities in diverse scenarios.</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+        </div>
+    </section>
+
+<!-- Video  -->
+    <section>
+        <div class="container">
+        <div class="row">
+            <div class="col my-3">
+                <p class="text_header">
+                    Video
+                </p>
+                <div class="text-center mb-4">
+                    <div style="position:relative;padding-top:56.25%;">
+                        <iframe src="https://www.youtube.com/embed/DnFmsNzzbWY?si=nFb6igz3Vf7kHDQ6" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+    <section class="color_switch">
+        <div class="container">
+        <div class="row" id="abstract">
+            <div class="col my-3">
+                <p class="text_header">
+                    Method Overview
+                </p>
+                <br>
+                <img src="images/teaser.png" class="teaser_fig" width="90%">
+                <br>
+                <p class="text_subheader">
+                    3D Feature Distillation and Point Pruning
+                </p>
+                <br>
+                <img src="images/method1.png" class="teaser_fig" width="90%">
+                <br>
+                
+                <p class="body_text">
+                    Initially, Given a pair of RGBD scans from a 3D scene, we first extract DINO features from the images and back-project them to the partial
+                    point clouds.  However, while DINO does exhibit correspondences across views, it is not strictly multiview-invariant, leading
+                    to local feature discrepancies in overlapping views.
+                    To address the problem of local feature discrepancies in overlapping views, 
+                    we propose a lightweight feature refinement network. This network, consisting of a two-layer per-point MLP, 
+                    can be efficiently trained on a single source scene. 
+                    When applied to novel scenes, it produces consistent and high-quality features without any modifications. 
+                    The main concept behind this approach is to ensure that features within the same neighborhood are similar, 
+                    while those from distant neighborhoods are distinct. 
+                    We achieve this by optimizing the network's weights using the contrastive learning framework. 
+                    During training, the refined features obtained from the network are passed through a projection head to obtain projected features. 
+                    However, after training on the source scene, the projection head is discarded, 
+                    and only the feature refinement network is utilized for novel scenes.
+                    Additionally, we implement a point-pruning mechanism to augment feature continuity within each local neighborhood. 
+                </p>
+
+                <p class="text_subheader">
+                    End-Effector Optimization
+                </p>
+                <br>
+                <img src="images/method2.png" class="teaser_fig" width="90%">
+                <br>
+
+                <p class="body_text">
+                    By establishing coherent feature fields on both source and target scenes, we devise an energy function that facilitates 
+                    the minimization of feature discrepancies w.r.t. the end-effector parameters between the demonstration and the target 
+                    manipulation. Additionally, to prevent extreme hand poses that could potentially damage the robot, we impose a
+                    pose constraint Eposepβq penalizing out-of-limit hand pose.
+                </p>
+
+                <!-- <ul class="body_text">
+                	<li class="body_text">a single action unit,</li>
+                	<li class="body_text">an unordered union of multiple action units,</li>
+                	<li class="body_text">an ordered list of multiple action units,</li>
+                </ul> -->
+
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+	<section class="color_switch">
+        <div class="container">
+        <div class="row" id="abstract">
+            <div class="col my-3">
+                <p class="text_header">
+                    Experiments
+                </p>
+                
+                <p class="body_text">
+                    We evaluate our model by deploying it to a robot hand and conducting experiments under various
+                    setups. Given the superior stability of large image models like DINO on real photos compared 
+                    to synthetic images, we opt to assess our method directly in real-world settings, bypassing simulations.
+                </p>
+                <br>
+                <img src="images/vis_volume.png" class="teaser_fig" width="80%">
+                <br>
+                <img src="images/vis_prune.png" class="teaser_fig" width="80%">
+                <br>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+
+        <div class="row" id="ack" style="margin-top: 1rem">
+            <p class="col text_ack my-3">
+                If you have any questions, please contact Qianxu Wang (@stu.pku.edu.cn).
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    </body>
+</html>
