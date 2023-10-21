@@ -1,3 +1,9 @@
 ./data
 ./data/*
 *.pth
+./example_data
+./example_data/*
+*__pycache__*
+*pth
+*npy
+*png
