@@ -266,7 +266,7 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
             mask_physics = get_index_from_range(points, return_mask=True)
             mask = mask_sam & mask_physics
             index = np.nonzero(mask)
-        elif prune_method == 'pyhsics':
+        elif prune_method == 'physics':
             mask_physics = get_index_from_range(points, x=[-455, 455], y=[-545, 545], z=[-200, 800],return_mask = True)
             mask = (depth!=0) & mask_physics
             index = np.nonzero(mask)
@@ -302,7 +302,7 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
         masked_colors = downsampled_colors[downsampled_mask]
         batch_sign = np.ones((masked_points.shape[0],)) * (idx + 1)
         
-        if prune_method == 'pyhsics':
+        if prune_method == 'physics':
             ### to prune the table top off
             pcd = o3d.geometry.PointCloud()
             pcd.points = o3d.utility.Vector3dVector(masked_points)

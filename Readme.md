@@ -1,5 +1,5 @@
 # SparseDFF: Sparse-View Feature Distillation for One-Shot Dexterous Manipulation
-We introduce a novel method for acquiring view-consistent 3D DFF s from sparse RGBD observations, enabling one-shot learning of dexterous manipulations that are transferable to novel scenes. 
+We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RGBD observations, enabling one-shot learning of dexterous manipulations that are transferable to novel scenes. 
 
 ## Overview
 ### Constructing the Feature Field

@@ -8,3 +8,5 @@ example_data/
 *npy
 *png
 thirdparty_module/*
+__pycache__/
+```
