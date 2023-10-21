@@ -3,9 +3,10 @@ device: null
 visualize: false # visualize results using trimesh
 verbose: false
 extrinsics_path: ./camera/workspace/calibration.json
-data1: /home/user/wangqx/stanford/kinect/data/20230929_150633 # reference
-data2: /home/user/wangqx/stanford/kinect/data/20230929_150633 # test
-model_path: null 
+data1: ./example_data/img/20231010_monkey_original # reference
+data2: ./example_data/img/20231010_monkey_test # test
+hand_ref_pose_name: monkey
+model_path: ./example_data/pth/glayer_key0_monkey_64_T0.007_20000.pth
 img_preprocess: 
   - sam
   - sam

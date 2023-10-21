@@ -484,9 +484,9 @@ def get_dino_features(img_raw:np.ndarray, scale:int=3)->torch.Tensor:
     """
     img_raw = img_raw.astype('float32') / 255.
     img_raw = skimage.img_as_float32(img_raw)
-    torch.hub.set_dir( "/home/user/wangqx/stanford/")
-    model = torch.hub.load('/home/user/wangqx/stanford/Learning_based_method/dinov2', 'dinov2_vitb14', source='local', pretrained=False).cuda()
-    model.load_state_dict(torch.load('/home/user/wangqx/ndf_robot/dinov2_vitb14_pretrain.pth'))
+    torch.hub.set_dir( "./")
+    model = torch.hub.load('./thirdparty_module/dinov2', 'dinov2_vitb14', source='local', pretrained=False).cuda()
+    model.load_state_dict(torch.load('./thirdparty_module/dinov2_vitb14_pretrain.pth'))
     h, w = img_raw.shape[0] // 14 * 14,  img_raw.shape[1] // 14 * 14
     img = skimage.transform.resize(
                 img_raw,

@@ -122,7 +122,7 @@ class Dino_Processor:
                                                 name=os.path.split(self.conf.data2)[-1])
         else:
             raise NotImplementedError
-        alignment.sample_pts()
+        alignment.sample_pts(name=self.conf.hand_ref_pose_name)
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -135,11 +135,11 @@ if __name__ == '__main__':
     base_conf = OmegaConf.load(args.config)
     cli_conf = OmegaConf.from_cli()
     conf = OmegaConf.merge(base_conf, cli_conf)
-    if conf.visualize == False:
-        display = Display(visible=0, size=(1024, 768))
-        display.start()
-        pyglet.options['shadow_window'] = False
-        pyglet.options['display'] = display.display
+    # if conf.visualize == False:
+    #     display = Display(visible=0, size=(1024, 768))
+    #     display.start()
+    #     pyglet.options['shadow_window'] = False
+    #     pyglet.options['display'] = display.display
     dino_processor = Dino_Processor(conf, args.name, conf.mode)
     dino_processor.process()
     end_time = time.time()

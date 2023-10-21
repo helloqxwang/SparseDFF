@@ -13,7 +13,7 @@ import yaml
 from matplotlib import cm
 from optimize.hand_model import robust_compute_rotation_matrix_from_ortho6d
 
-def read_tranformation(data_path:str='/home/user/wangqx/stanford/kinect/tranform.yaml'):
+def read_tranformation(data_path:str='./camera/tranform.yaml'):
     with open(data_path, 'r') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
     position = np.array([data['pose']['position']['x'], data['pose']['position']['y'], data['pose']['position']['z']])
@@ -27,7 +27,7 @@ def read_tranformation(data_path:str='/home/user/wangqx/stanford/kinect/tranform
     return table2cam, cam2base
 
 
-def read_hand_arm(forder_path:str='/home/user/wangqx/stanford/kinect/hand_arm', name=None):
+def read_hand_arm(forder_path:str='./camera/hand_arm', name=None):
     """
     read the hand and arm points from the forder
 
@@ -158,14 +158,17 @@ class Hand_AlignmentCheck:
         self.loss_fn = torch.nn.L1Loss()
 
     ###### can sample some pt from the reference frame and then return the best corresponding points in the test frame
-    def sample_pts(self, hand_gt_pose: torch.Tensor = None):
-        hand_gt_pose = read_hand_arm(name='monkey0')       
-        hand_gt_pose[:, 2] += 0.12
-        hand_gt_pose[:, 1] -= 0.10
-        hand_gt_pose[:, 0] -= 0.20
-        hand_gt_pose[:, 3:9] = np.array([0, -1, 0, 0, 0, 1])[None, :]   
+    def sample_pts(self, name='monkey'):
+        hand_gt_pose = np.load(f'./camera/hand_arm/{name}.npy')
+        # print(hand_gt_pose.shape)      
+        # hand_gt_pose[:, 2] += 0.12
+        # hand_gt_pose[:, 1] -= 0.10
+        # hand_gt_pose[:, 0] -= 0.20
+        # hand_gt_pose[:, 3:9] = np.array([0, -1, 0, 0, 0, 1])[None, :]   
         hand_gt_pose = torch.from_numpy(hand_gt_pose).float().to(self.dev)
         self.hand.set_parameters(hand_gt_pose, retarget=False, robust=True)
+
+        
         vquery_mesh = self.hand.get_trimesh_data(0)
         hand_gt:np.ndarray = self.hand.get_surface_points()[0].detach().cpu().numpy()
         self.hand.save_pose('./data/des_ori.npy', hand_gt_pose, False, False)

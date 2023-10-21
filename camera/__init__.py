@@ -49,7 +49,7 @@ def load_cddi(data_path):
     intrinsics = np.stack(intrinsics_ls, axis=0)
     return colors, depths, distortion, intrinsics
 
-def read_tranformation(data_path:str='/home/user/wangqx/stanford/kinect/tranform.yaml'):
+def read_tranformation(data_path:str='./camera/transform.yaml'):
     with open(data_path, 'r') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
     position = np.array([data['pose']['position']['x'], data['pose']['position']['y'], data['pose']['position']['z']])
@@ -244,7 +244,7 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
 
             neg_num = 2 
             if key == 0:
-                neg_index = get_index_from_range(points, x=[-400, 400], y = [320, 460], z=[-20, 20])
+                neg_index = get_index_from_range(points, x=[-400, 400], y = [370, 460], z=[-10, 20])
                 if neg_index[0].shape[0] < neg_num:
                     neg_index = get_index_from_range(points, x=[-400, 400], y = [- 370, - 460], z=[-150, 900])
             elif key == 1:

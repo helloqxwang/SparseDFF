@@ -35,7 +35,7 @@ def vis_mask_image(image, mask, points, labels, bbox=None, save_path="./test.png
     plt.savefig(save_path)
 
 class Sam_Detector():
-    def __init__(self, sam_checkpoint = "/home/user/wangqx/stanford/thirdparty_module/ckp/sam_vit_h_4b8939.pth", 
+    def __init__(self, sam_checkpoint = "./thirdparty_module/sam_vit_h_4b8939.pth", 
                  model_type = "vit_h", device = "cuda") -> None:
 
         sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
