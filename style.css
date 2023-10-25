@@ -6577,14 +6577,14 @@ a.close.disabled {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 15;
+    z-index: 5;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: center;
     justify-content: center;
     padding-left: 0;
-    margin-right: 15%;
-    margin-left: 15%;
+    margin-right: 25%;
+    margin-left: 25%;
     list-style: none
 }
 
@@ -6592,7 +6592,7 @@ a.close.disabled {
     box-sizing: content-box;
     -ms-flex: 0 1 auto;
     flex: 0 1 auto;
-    width: 30px;
+    width: 10px;
     height: 3px;
     margin-right: 3px;
     margin-left: 3px;
@@ -6600,9 +6600,9 @@ a.close.disabled {
     cursor: pointer;
     background-color: #fff;
     background-clip: padding-box;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    opacity: .5;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    opacity: .2;
     transition: opacity .6s ease
 }
 
@@ -6613,17 +6613,17 @@ a.close.disabled {
 }
 
 .carousel-indicators .active {
-    opacity: 1
+    opacity: .2
 }
 
 .carousel-caption {
     position: absolute;
     right: 15%;
-    bottom: 20px;
+    bottom: 5px;
     left: 15%;
     z-index: 10;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     color: #fff;
     text-align: center
 }

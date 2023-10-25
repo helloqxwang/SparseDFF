@@ -228,7 +228,7 @@
                 <ul class="list-inline">
                     <li class="list-inline-item mx-2">
                         <a href="">
-                            <p>Qianxu Wang<sup>&#127982;</sup></p>
+                            <p>Qianxu Wang<sup>&#127982;&#129302;</sup></p>
                         </a>
                     </li>
                     <li class="list-inline-item mx-2">
@@ -238,7 +238,7 @@
                     </li>
                     <li class="list-inline-item mx-2">
                         <a href="https://cs.stanford.edu/~congyue/">
-                            <p>Congyue Deng<sup>&#127794;</sup></p>
+                            <p>Congyue Deng<sup>&#127794;+</sup></p>
                         </a>
                     </li>
                     <li class="list-inline-item mx-2">
@@ -251,9 +251,10 @@
                             <p>Hao Dong<sup>&#127982;</sup></p>
                         </a>
                     </li>
+                    <br>
                     <li class="list-inline-item mx-2">
                         <a href="https://yzhu.io/">
-                            <p>Yixin Zhu<sup>&#127982;+</sup></p>
+                            <p>Yixin Zhu<sup>&#127982;&#129302;&#127800;+</sup></p>
                         </a>
                     </li>
                     <li class="list-inline-item mx-2">
@@ -262,14 +263,20 @@
                         </a>
                     </li>
                     <br>
-                    (<sup>+</sup>equal advising)
+                    (<sup>+</sup>corresponding author)
                 </ul>
                 <ul class="list-inline" style="margin-top: 1rem">
                     <li class="list-inline-item mx-3">
-                        <p><sup>&#127794;</sup>Stanford University</p>
+                        <p><sup>&#127794;</sup>Department of Computer Science, Stanford University</p>
                     </li>
                     <li class="list-inline-item mx-3">
-                        <p><sup>&#127982;</sup>Peking University</p>
+                        <p><sup>&#127982;</sup>CFCS, School of Computer Science, Peking University</p>
+                    </li>
+                    <li class="list-inline-item mx-3">
+                        <p><sup>&#129302;</sup>Institute for AI, Peking University</p>
+                    </li>
+                    <li class="list-inline-item mx-3">
+                        <p><sup>&#127800;</sup>PKU-WUHAN Institute for Artificial Intelligence</p>
                     </li>
                 </ul>
             </div>
@@ -322,7 +329,7 @@
                     <source src="videos/bowlToCup1.mp4" type="video/mp4">
                   </video>
                   <div class="carousel-caption d-none d-md-block">
-                    <h5>Round Bowl to Cup</h5>
+                    <h5>Simple Bowl to Mug</h5>
                   </div>
                 </div>
                 <div class="carousel-item" data-bs-interval="16000">
@@ -330,7 +337,7 @@
                     <source src="videos/Bowl2Catbowl.mp4" type="video/mp4">
                   </video>
                   <div class="carousel-caption d-none d-md-block">
-                    <h5>Round Bowl to Catbowl</h5>
+                    <h5>Simple Bowl to Catbowl</h5>
                   </div>
                 </div>
                 <div class="carousel-item" data-bs-interval="10000">
@@ -346,7 +353,7 @@
                     <source src="videos/box.mp4" type="video/mp4">
                   </video>
                   <div class="carousel-caption d-none d-md-block">
-                    <h5>Cheezit Box to Cookie Box</h5>
+                    <h5>YCB Box to Cookie Box</h5>
                   </div>
                 </div>
                 <div class="carousel-item" data-bs-interval="6000">
@@ -354,7 +361,7 @@
                     <source src="videos/monkey_coarse.mp4" type="video/mp4">
                   </video>
                   <div class="carousel-caption d-none d-md-block">
-                    <h5>Monkey to Monkey in coarse</h5>
+                    <h5>Monkey in scene context</h5>
                   </div>
                 </div>
                 <div class="carousel-item" data-bs-interval="8000">
@@ -499,8 +506,15 @@
                 <br>
                 <img src="images/vis_volume.png" class="teaser_fig" width="80%">
                 <br>
+                <p class="body_text">
+                This figure visualizes the energy field derived from the differences in
+features between the source and target scenes. Areas marked in yellow represent regions with smaller feature
+differences, indicating higher similarity, while purple denotes larger differences, highlighting dissimilarity
+between features.</p>
                 <img src="images/vis_prune.png" class="teaser_fig" width="80%">
                 <br>
+                <p class="body_text">Features on the point clouds are visualized with RGB values after PCA
+                    to 3 channels. The hand positions obtained through optimization are shown in blue.</p>
             </div>
         </div>
         </div>
@@ -510,7 +524,7 @@
 
         <div class="row" id="ack" style="margin-top: 1rem">
             <p class="col text_ack my-3">
-                If you have any questions, please contact Qianxu Wang (@stu.pku.edu.cn).
+                If you have any questions, please contact Qianxu Wang (2100013013@stu.pku.edu.cn).
             </p>
         </div>
     </div>
