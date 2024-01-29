@@ -1,5 +1,6 @@
 ./data
 ./data/*
+data/*
 *.pth
 example_data/
 ./example_data/*
@@ -9,4 +10,5 @@ example_data/
 *png
 thirdparty_module/*
 __pycache__/
-```
+./temp.py 
+temp.py
