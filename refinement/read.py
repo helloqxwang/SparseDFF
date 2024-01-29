@@ -1,11 +1,91 @@
 import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import numpy as np
 import torch
 from typing import Tuple, List
-from camera import undistort, pipeline
-from camera.camera_tools import load_cddi, get_extrinsics_from_json, vis_color_pc
+from camera import pipeline
+# from camera.camera_tools import load_cddi, get_extrinsics_from_json, vis_color_pc
 import argparse
+import open3d as o3d
+import json
+import yaml
+from scipy.spatial.transform import Rotation
+
+def vis_color_pc(points:np.ndarray, colors:np.ndarray, size:int=0.1, save=False, rot=None):
+    """view the point cloud with colors
+
+    Args:
+        points (np.ndarray): (n, 3)
+        colors (np.ndarray): (n, 3)
+    """
+    if size == 0:
+        size = 0.1
+    pcd = o3d.geometry.PointCloud()
+    pcd.points = o3d.utility.Vector3dVector(points)
+    if colors is not None:
+        pcd.colors = o3d.utility.Vector3dVector(colors / 255.0)
+
+    axis = o3d.geometry.TriangleMesh.create_coordinate_frame(size=size, origin=[0, 0, 0])
+    if rot is not None:
+        axis.rotate(rot, center=[0, 0, 0])
+    if save:
+        o3d.io.write_point_cloud('./vis_pcd.ply', pcd)
+    else:
+        o3d.visualization.draw_geometries([pcd, axis])
+
+def read_tranformation(data_path:str='../camera/transform.yaml'):
+    print('Reading transformation from ', data_path)
+    with open(data_path, 'r') as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    position = np.array([data['pose']['position']['x'], data['pose']['position']['y'], data['pose']['position']['z']])
+    quaternion = np.array([data['pose']['orientation']['x'], data['pose']['orientation']['y'], data['pose']['orientation']['z'], data['pose']['orientation']['w']])
+    table2cam = np.eye(4)
+    table2cam[:3, 3] = position
+    table2cam[:3, :3] = Rotation.from_quat(quaternion).as_matrix()
+    cam2base_str:str = data['cam2base']
+    cam2base_str = cam2base_str.replace('[', '').replace(']', '').replace('\n', '')
+    cam2base = np.array([float(i) for i in cam2base_str.split()]).reshape(4, 4)
+    return table2cam, cam2base
+
+def get_extrinsics_from_json(path:str):
+    """return the extrinsics of the four cameras 
+        world2cam0, world2cam1, world2cam2, world2cam3
+
+    Args:
+        path (str): where calibration json file is
+
+    Returns:
+        np.ndarray: extrinsics of the four cameras [world_cam] shape: (4, 4, 4)
+    """
+
+    with open(path, 'r') as f:
+        data = json.load(f)
+    cam1 = data['camera_poses']["cam1_to_cam0"]
+    cam2 = data['camera_poses']["cam2_to_cam0"]
+    cam3 = data['camera_poses']["cam3_to_cam0"]
+
+    table2cam, cam2base = read_tranformation()
+    ### we seen the table frame as the world frame
+    world_c0 = table2cam
+    world_c0[:3, 3] = world_c0[:3, 3] * 1000
+    world2base = cam2base @ world_c0
+
+    c0_c1 = np.eye(4)
+    c0_c1[:3, :3] = np.array(cam1['R']).reshape(3, 3)
+    c0_c1[:3, 3] = np.array(cam1['T']) * 1000
+    world_c1 = c0_c1 @ world_c0
+    c0_c2 = np.eye(4)
+    c0_c2[:3, :3] = np.array(cam2['R']).reshape(3, 3)
+    c0_c2[:3, 3] = np.array(cam2['T']) * 1000
+    world_c2 = c0_c2 @ world_c0
+    c0_c3 = np.eye(4)
+    c0_c3[:3, :3] = np.array(cam3['R']).reshape(3, 3)
+    c0_c3[:3, 3] = np.array(cam3['T']) * 1000
+    world_c3 = c0_c3 @ world_c0
+    extrinsics = np.stack([world_c0, world_c1, world_c2, world_c3], axis=0)
+
+    return extrinsics, world2base
 
 def match_ij(points0:torch.Tensor, points1:torch.Tensor, dis_thre=0.01):
     """_summary_
@@ -53,12 +133,8 @@ def load_data(data_path, extrinsics_path, data_ls=None, auto_detect=False, scale
     for ii, path in enumerate(path_ls):
         name = os.path.split(path)[-1]
         name = name + 'read'
-
         
-        
-        
-        
-        points, features, colors, batch_sign, raw_points= pipeline(path, extrinsics_path, save=False, scale=scale, name = name, prune_method='sam')
+        points, features, colors, batch_sign, raw_points= pipeline(path, extrinsics_path, save=False, scale=scale, name = name, prune_method='sam', samckp_path='../thirdparty_module/sam_vit_h_4b8939.pth')
         vis_color_pc(points.cpu().numpy(), colors.reshape(-1,3), 0.1, save=True)
         # exit()
         # np.save(f'./features_pruned_{ii}.npy', features.cpu().numpy())
@@ -71,14 +147,16 @@ def load_data(data_path, extrinsics_path, data_ls=None, auto_detect=False, scale
         features_ls.append(features)
         points_ls.append(points)
         sign_ls.append(batch_sign)
-        print('Saving_path:', os.path.abspath(f'./data{key}'))
+        saving_path = os.path.abspath(f'./data{key}')
+        print('Saving_path:', os.path.abspath(saving_path))
+        os.makedirs(saving_path, exist_ok=True)
         for i in range(4):
             point_i = points[batch_sign == i + 1]
             feature_i = features[batch_sign == i + 1]
             batch_sign_i = batch_sign[batch_sign == i + 1]
-            np.save(f'./data{key}/points_{ii}_{i}.npy', point_i.cpu().numpy())
-            np.save(f'./data{key}/features_{ii}_{i}.npy', feature_i.cpu().numpy())
-            np.save(f'./data{key}/scene_sign_{ii}_{i}.npy', batch_sign_i.cpu().numpy())
+            np.save(os.path.join(saving_path, f'points_{ii}_{i}.npy'), point_i.cpu().numpy())
+            np.save(os.path.join(saving_path, f'features_{ii}_{i}.npy'), feature_i.cpu().numpy())
+            np.save(os.path.join(saving_path, f'scene_sign_{ii}_{i}.npy'), batch_sign_i.cpu().numpy())
             for j in range(4):
                 if i >= j :
                     continue
@@ -87,7 +165,7 @@ def load_data(data_path, extrinsics_path, data_ls=None, auto_detect=False, scale
                 feature_j = features[batch_sign == j + 1]
                 tt:np.ndarray = match_ij(point_i, point_j, dis_thre=0.01)
                 print(tt.shape)
-                np.save(f'./data{key}/match_{ii}_{i}_{j}.npy', tt)
+                np.save(os.path.join(saving_path, f'match_{ii}_{i}_{j}.npy'), tt)
 
                 
                 
@@ -119,18 +197,9 @@ if __name__ == "__main__":
     argparser.add_argument('--mode', type=str, default='linear_probe')
     argparser.add_argument('--key', type=int, default=0)
     argparser.add_argument('--scale', type=bool, default=14)
+    argparser.add_argument('--dir_path', type=str, default='../example_data/img')
+    argparser.add_argument('--extrinsics_path', type=str, default='../camera/workspace/calibration.json')
+    argparser.add_argument('--img_data_path', type=str, default='20231010_monkey_original')
     args = argparser.parse_args()
-    data_path = '../camera/data'
-    extrinsics_path = '../camera/workspace/calibration.json'
-    # data_ls = from_to(data_path, '20230911_142418', '20230911_142957')
-    data_ls = ['20230929_150633']
-    print(data_ls)
-    load_data(data_path, extrinsics_path, data_ls=data_ls, auto_detect=False, scale=args.scale, key=args.key, device='cuda', mode = args.mode)
-    # data_path = '/home/user/wangqx/stanford/kinect/workspace/2021-01-27-16-21-54'
-    # extrinsics_path = '/home/user/wangqx/stanford/kinect/workspace/2021-01-27-16-21-54/extrinsics.json'
-    # load_data(data_path, extrinsics_path, data_ls=['2021-01-27-16-21-54-0'], auto_detect=False, scale=3, key=0, device='cuda')
-    # data_path = '/home/user/wangqx/stanford/kinect/workspace/2021-01-27-16-21-54'
-    # extrinsics_path = '/home/user/wangqx/stanford/kinect/workspace/2021-01-27-16-21-54/extrinsics.json'
-    # load_data(data_path, extrinsics_path, data_ls=['2021-01-27-16-21-54-0'], auto_detect=False, scale=3, key=0, device='cuda')
-    # data_path = '/home/user/wangqx/stanford/kinect/workspace/2021-01-27-16-21-54'
-    # extrinsics_path = '/home/user/wangqx/stanford/kinect/workspace/2021-01-27-16-21-54/extrinsics.json'
+    data_ls = [args.img_data_path]
+    load_data(args.dir_path, args.extrinsics_path, data_ls=data_ls, auto_detect=False, scale=args.scale, key=args.key, device='cuda', mode = args.mode)

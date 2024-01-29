@@ -1,7 +1,20 @@
 # SparseDFF: Sparse-View Feature Distillation for One-Shot Dexterous Manipulation
 We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RGBD observations, enabling one-shot learning of dexterous manipulations that are transferable to novel scenes. 
 
-## Overview
+ [Project](https://helloqxwang.github.io/SparseDFF/) | [Full Paper](https://arxiv.org/abs/2310.16838) 
+
+
+
+## What's Inside This Repository!
+
+- A brief Introduction to SparseDFF.
+- Everything mentioned in the paper and a step-by-step guide to use it!
+- Friendly and Useful Installation guide for Kinect SDK. Codes for *automatic image capturing during manipulation transfer at runtime*.
+- Additional codes for EE besides Shadow Hand (Comming soon!)
+
+
+
+## Method Overview
 ### Constructing the Feature Field
 Initially, we map the image features to the 3D point cloud, allowing for propagation across the 3D space to establish a dense feature field.
 
@@ -12,6 +25,8 @@ Additionally, we implement a point-pruning mechanism to augment feature continui
 ### Optimize the EE Pose
 By establishing coherent feature fields on both source and target scenes, we devise an energy function that facilitates the minimization of feature discrepancies w.r.t. the end-effector parameters between the demonstration and the target manipulation. 
 
+
+
 ## Installation
 We provide sample data that allows you to directly conduct manipulation transfer within our collected data, and offer visualization code for visualizing the experimental results. Additionally, we also provide code for data collection using Kinect. For additional environment configuration and instructions, please refer to [Data Collection](#data-collection) Part.
 
@@ -20,6 +35,8 @@ We provide bash script for example data download and pretrained model download.
 ```
 git clone --recurse-submodules git@github.com:Halowangqx/SparseDFF.git
 conda create -n sparsedff python=3.9
+
+# Install submodules
 cd ./SparseDFF/thirdparty_module/dinov2
 pip install -r requirements.txt
 cd ../pytorch_kinematics
@@ -29,8 +46,8 @@ pip install -e .
 cd ../segment-anything
 pip install -e .
 
-sudo apt install xvfb 
-pip install open3d opencv-python scikit-image trimesh lxml pyvirtualdisplay pyglet
+# download relevant packages
+pip install open3d opencv-python scikit-image trimesh lxml pyvirtualdisplay pyglet==1.5.15
 
 # download the pretrained-model for sam and dinov2
 bash pth_download.sh
@@ -40,31 +57,95 @@ bash download.sh
 
 
 
-## Usage
-### Test with our given models
-All configurations are managed by the `config.yaml`. The usage of specific parameters can be found in the comments within the file. 
+## Camera Installation
 
-Test with our default example data:
-```
-python unified_optimize.py 
-```
+If you simply wish to run our model (including both training and inference) on pre-captured data, there's no need for the following installation steps. Go ahead and start playing with SparseDFF directly! 
 
-After finishing the test, a clear visulization using trimesh will be presented if `visualize` is `true` in `config.yaml``. Otherwise, a picture of the visulization will be saved.
+However, if you intend to collect your own data using Azure Kinect, please proceed with the following setup.
 
-### Data Collection
-We use four [Azure Kinects](https://azure.microsoft.com/en-us/products/kinect-dk) for data collection. We provide `capture_3d.py` for capturing the data required for the model . `capture.py` is used for convenient image collection required for multi-calibration (with [multical](https://pypi.org/project/multical/)). Additionally, you can use [easy_handeye](https://github.com/IFL-CAMP/easy_handeye) for eye-on-base calibration, and save the calibration matrix, along with the pose matrix of the experiment table, in the tranform.yaml folder. The code will automatically read the saved information during runtime.
+> comming soon!
 
-The file struction is as:
+
+
+## Step-by-step Tutorial
+
+### Quick Start: Testing with Our Provided Data & Models
+
+If you'd like to quickly experience the results of our model, you can directly use our default example data for testing.
+
+#### Testing Steps
+
+1. **Configuration Management**: All configurations are managed via the `config.yaml` file. You can find detailed usage instructions and comments for each parameter within this file.
+
+2. **Running the Test**: To test using the default example data, execute the following command:
+
+   ```
+   python unified_optimize.py
+   ```
+
+3. **Visualization Results**: After completing the test, if `visualize` is set to `true` in `config.yaml`, a clear trimesh visualization will be presented. Otherwise, the visualization result will be saved as an image.
+
+### Data Collection and Refined Model Training
+
+If you wish to test with your own data, follow these steps for data collection and preparation.
+
+#### Data Collection
+
+We utilize four [Azure Kinects](https://azure.microsoft.com/en-us/products/kinect-dk) for data collection. The steps are as follows:
+
+**Capturing 3D Data**: Use `capture_3d.py` to capture the data required for the model.
+
+*Structure of the Data*:
+
 ```bash
-+-- camera
-|  +-- capture_3d.py  
-|  +-- capture.py
-|  +-- transform.yaml
+|____20231010_monkey_original # name
+| |____000262413912 # the serial number of the camera
+| | |____depth.npy # depth img
+| | |____colors.npy # rgb img
+| | |____intrinsic.npy # intrinsic of the camera
+| | |____points.npy # 3D points calculated from the depth and colors
+| | |____colors.png # rgb img (.png for quick view)
+| | |____distortion.npy # Distortion
+| | ... # Data of other cameras
 ```
-### Test our model with data captured in real time
-Additionally, we provide a pipeline that allows for automatic capturing of images during manipulation transfer at runtime. After configuring the camera environment, you only need to change the value of `data2` in the `config.yaml` file to `null`.
 
-## Visualize
+#### Training the Refinement Model
+
+To train the refinement model corresponding to your data, follow these steps:
+
+1. **Data Preparation**: Navigate to the refinement directory and execute the following commands:
+
+   ```
+   cd refinement
+   python read.py --img_data_path 20231010_monkey_original
+   ```
+
+2. **Start Training**: Run the following command to train the model:
+
+   ```
+   python train_linear_probe.py --mode glayer --key 0
+   ```
+
+3. **Model Configuration**: After training, you can find the corresponding checkpoint in the refinement directory, and then update the `model_path` in `config.yaml` to the appropriate path.
+
+### Testing with Your Data
+
+Before proceeding with the testing, it's important to ensure that your newly collected reference data, the trained refinement network, and the test data are correctly specified in the `config.yaml` file. Once these elements are confirmed and properly set up in the configuration, you can directly execute：
+
+```bash
+python unified_optimize.py
+```
+
+We also provide a pipeline for **automatic image capturing during manipulation transfer at runtime**.
+
+1. **Configure the Camera Environment**: Set up the camera environment as described in the data collection section.
+2. **Automatic Image Capture**: After configuring the camera environment, change the value of `data2` in the `config.yaml` file to `null` to enable automatic image capturing during reference.
+
+With these steps, you can either quickly test our model with provided materials or delve deeper into experiments and model training with your own data. We look forward to seeing the innovative applications you create using our model!
+
+
+
+# Visualize
 
 We provide the `vis_features.py` script in order to perform further fine-grained visualization on the data in the  `./data `directory.
 

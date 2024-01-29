@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-from prune.tools import  depth2pt_K_numpy, get_dino_features
+# from prune.tools import  get_dino_features
 from typing import List
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import minmax_scale
@@ -11,6 +11,7 @@ import yaml
 import json
 from scipy.spatial.transform import Rotation 
 import os
+import skimage
 
 CAM = {
     "cam0": '000299113912',
@@ -19,6 +20,102 @@ CAM = {
     "cam3": '000262413912',
 }
 CAM_INDEX = [CAM['cam0'], CAM['cam1'], CAM['cam2'], CAM['cam3']]
+
+def get_dino_features(img_raw:np.ndarray, scale:int=3)->torch.Tensor:
+    """get dino features for only one img
+
+    Args:
+        img (np.ndarray): (h, w, 3)
+        scale (int, optional): _description_. Defaults to 3.
+
+    Returns:
+        torch.Tensor: (h, w, F)
+    """
+    img_raw = img_raw.astype('float32') / 255.
+    img_raw = skimage.img_as_float32(img_raw)
+    if os.path.isdir('./thirdparty_module/dinov2'):
+        torch.hub.set_dir( "./")
+        model = torch.hub.load('./thirdparty_module/dinov2', 'dinov2_vitb14', source='local', pretrained=False).cuda()
+        model.load_state_dict(torch.load('./thirdparty_module/dinov2_vitb14_pretrain.pth'))
+    else:
+        torch.hub.set_dir("../")
+        model = torch.hub.load('../thirdparty_module/dinov2', 'dinov2_vitb14', source='local', pretrained=False).cuda()
+        model.load_state_dict(torch.load('../thirdparty_module/dinov2_vitb14_pretrain.pth'))
+    h, w = img_raw.shape[0] // 14 * 14,  img_raw.shape[1] // 14 * 14
+    img = skimage.transform.resize(
+                img_raw,
+                (img_raw.shape[0] // 14 * 14 , img_raw.shape[1] // 14 * 14 )
+            ).astype('float32')
+    img = torch.from_numpy(img)
+    img = img[None, :].cuda()
+    # print('Picture for Dino size:', img.shape)
+    with torch.no_grad():
+        ### (batch size, 3, height, width)
+        ret = model.forward_features(img.permute(0, 3, 1, 2))
+    features = ret['x_norm_patchtokens']
+    N, _, F = features.shape
+    ### (height, width, features) torch.Tensor np.float32
+    features = features.reshape(img.shape[1] // 14, img.shape[2] // 14, F).permute(2, 0, 1)
+    features = torch.nn.functional.interpolate(features.unsqueeze(0), size=(img_raw.shape[0] // scale , img_raw.shape[1] // scale ), mode='bilinear', align_corners=False)
+    features = features.squeeze(0).permute(1, 2, 0)
+    return features
+
+def depth2pt_K_numpy(depths:np.ndarray, K:np.ndarray , R:np.ndarray, xyz_images=True)->np.ndarray:
+    """
+    The batch_K_version  of depth2pt, but without the auto-scale of the camera parameters.
+    So K MUST MATCH the depths.
+
+    If xyz_images is True: 
+        Translate a pile of depth images ( N x H x W) to xyz images ( N x H x W x 3)
+    Else: 
+        Translate a pile of depth images ( N x H x W) to 3D points ( Num x 3) filtered by the depth < 0
+        bath_sign (Num, ) is the Sign of the batch, noting every selected points which batch it belongs to
+        zero_filter (Num, ) is the filter of the points which depth > 0
+
+    Args:
+        depths (np.ndarray): (n, h, w)
+        K (np.ndarray): the intrinsics (n, 3, 3)
+        R (np.ndarray): the rotation matrix (n, 4, 4)
+
+    Returns:
+        If xyz_images is True: 
+            xyz_imges: np.ndarray (n, h, w, 3)
+        Else: 
+            points: np.ndarray (num, 3)
+            batch_sign: np.ndarray (num, )
+            zero_filter: np.ndarray (n*h*w, )
+    """
+    batch_size, h, w = depths.shape
+    fx = K[:, 0, 0][:, None, None]
+    fy = K[:, 1, 1][:, None, None]
+    x_offset = K[:, 0, 2][:, None, None]
+    y_offset = K[:, 1, 2][:, None, None]
+    ### 对于index(a0, a1, ..., an) shape：(n, a0, a1, ..., an)
+    ### transpose 改变了坐标的打包方式，从"所有行坐标在一起，所有列坐标在一起"变为"每个点的行列坐标在一起"。
+    ### 事实上，indice 坐标是以通道(channel)的方式分开的，即第一个通道存储所有的行坐标，第二个通道存储所有的列坐标。
+    ### 第二维和第三维度就是行列坐标
+    ### 但我们希望将点的所有横坐标放在一起处理，所有纵坐标放在一起处理，所以要将通道的维度放到最后。
+    # (3, batch_size, rey, resx) -> (batch_size, rey, resx, 3)
+    # indices = torch.stack(torch.meshgrid(torch.arange(batch_size), torch.arange(h), torch.arange(w), indexing='ij'), dim=-1).to(dtype=torch.float32).to(device)
+    indices = np.indices((batch_size ,h, w), dtype=np.float32).transpose(1, 2, 3, 0)
+    # depths[depths < 0] = 0
+    z_e = depths
+    x_e = (indices[..., -1] - x_offset) * z_e / fx
+    y_e = (indices[..., -2] - y_offset) * z_e / fy
+    homogenerous = np.ones((batch_size, h, w))
+    xyz_img = np.stack([x_e, y_e, z_e, homogenerous], axis=-1)  # Shape: [n, H, W, 4]
+    ### (n, 4, 4) * (n, h, w, 4) --> (n, h, w, 4)
+    # xyz_img_trans = np.stack([np.matmul(R[i], xyz_img[i].reshape(-1, 4).T).T.reshape(h, w, 4) for i in range(R.shape[0])], axis=0)
+    xyz_img_trans = np.matmul(R, xyz_img.reshape(xyz_img.shape[0], -1, 4).transpose(0, 2, 1)).transpose(0, 2, 1).reshape(batch_size, h, w, 4)
+    if xyz_images:
+        return xyz_img_trans[..., :3]
+    else:
+        batch_sign = np.zeros((batch_size, h, w))
+        for i in range(batch_size):
+            batch_sign[i] = i + 1
+        zero_filter = (depths != 0).reshape(-1)
+        batch_sign = batch_sign.reshape(-1)[zero_filter]
+        return xyz_img_trans[..., :3].reshape(-1, 3)[zero_filter], batch_sign, zero_filter
 
 def load_cddi(data_path):
     """load colors, depths, distortions, intrinsics from a folder contain multicamera
@@ -63,7 +160,7 @@ def read_tranformation(data_path:str='./camera/transform.yaml'):
     return table2cam, cam2base
 
 
-def get_extrinsics_from_json(path:str):
+def get_extrinsics_from_json(path:str, transformation_path:str='./camera/transform.yaml'):
     """return the extrinsics of the four cameras 
         world2cam0, world2cam1, world2cam2, world2cam3
 
@@ -79,8 +176,10 @@ def get_extrinsics_from_json(path:str):
     cam1 = data['camera_poses']["cam1_to_cam0"]
     cam2 = data['camera_poses']["cam2_to_cam0"]
     cam3 = data['camera_poses']["cam3_to_cam0"]
-
-    table2cam, cam2base = read_tranformation()
+    if os.path.isfile(transformation_path):
+        table2cam, cam2base = read_tranformation(transformation_path)
+    else:
+        table2cam, cam2base = read_tranformation('../camera/transform.yaml')
     ### we seen the table frame as the world frame
     world_c0 = table2cam
     world_c0[:3, 3] = world_c0[:3, 3] * 1000
@@ -184,7 +283,7 @@ def line_dist(points:torch.tensor, line:torch.tensor)->torch.tensor:
         dist = np.matmul(points, line[:-1].reshape(3, 1)) + line[-1]
         return dist.squeeze()
 
-def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, name = 'mm', prune_method='sam', key:int=0, verbose:bool=True)->(np.ndarray, np.ndarray, np.ndarray):
+def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, name = 'mm', prune_method='sam', key:int=0, verbose:bool=True, samckp_path:str='./thirdparty_module/sam_vit_h_4b8939.pth')->(np.ndarray, np.ndarray, np.ndarray):
     """
     the pipeline of the data loading/capturing then processing
     
@@ -219,7 +318,7 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
     colors_pile = colors[..., (2, 1, 0)]
     depths[depths < 0] = 0
     points_undistort = depth2pt_K_numpy(depths, intrinsics, np.linalg.inv(extrinsics), xyz_images=True)
-    detector = Sam_Detector()
+    detector = Sam_Detector(sam_checkpoint=samckp_path)
     points_ls = []
     features_ls = []
     batch_sign_ls = []
@@ -261,7 +360,8 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
             if verbose:
                 print('Color size:', colors.shape)
             mask_sam = detector.get_mask(colors, ref_points, labels)
-            vis_mask_image(colors, mask_sam, ref_points, labels, save_path=f'./data/sam{idx}.png')
+            if save:
+                vis_mask_image(colors, mask_sam, ref_points, labels, save_path=f'./data/sam{idx}.png')
             
             mask_physics = get_index_from_range(points, return_mask=True)
             mask = mask_sam & mask_physics
@@ -270,7 +370,8 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
             mask_physics = get_index_from_range(points, x=[-455, 455], y=[-545, 545], z=[-200, 800],return_mask = True)
             mask = (depth!=0) & mask_physics
             index = np.nonzero(mask)
-            vis_mask_image(colors, mask, None, None, save_path=f'./data/physics{idx}.png')
+            if save:
+                vis_mask_image(colors, mask, None, None, save_path=f'./data/physics{idx}.png')
         else:
             raise NotImplementedError
         
@@ -279,15 +380,14 @@ def pipeline(data_path:str, extrinsics_path:str, scale:int=3, save:bool=True, na
         prune_points = points[bb[1]:bb[3], bb[0]:bb[2]]
         pruned_mask = mask[bb[1]:bb[3], bb[0]:bb[2]].astype('float32')
         pruned_depth = depth[bb[1]:bb[3], bb[0]:bb[2]]
-        # from pdb import set_trace; set_trace()
         
         h, w, _ = pruned_colors.shape
         h, w = h // scale, w // scale
 
         features:torch.tensor = get_dino_features(pruned_colors, scale=scale)
-
-        cv2.imwrite(f'./data/dino_color{idx}.png', pruned_colors[..., (2, 1, 0)])
-        np.save(f'./data/dino_features{idx}.npy', features.cpu().numpy())
+        if save:
+            cv2.imwrite(f'./data/dino_color{idx}.png', pruned_colors[..., (2, 1, 0)])
+            np.save(f'./data/dino_features{idx}.npy', features.cpu().numpy())
         downsampled_points = cv2.resize(prune_points, (w, h), interpolation=cv2.INTER_NEAREST)
         downsampled_colors = cv2.resize(pruned_colors, (w, h), interpolation=cv2.INTER_NEAREST)
         downsampled_mask = cv2.resize(pruned_mask, (w, h), interpolation=cv2.INTER_NEAREST).astype('bool')

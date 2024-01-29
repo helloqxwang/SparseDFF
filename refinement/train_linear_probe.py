@@ -183,7 +183,7 @@ if __name__ == '__main__':
   argparser = argparse.ArgumentParser()
   argparser.add_argument('--config', type=str, default='./config.yaml')
   argparser.add_argument('--mode', type=str, default='base')
-  argparser.add_argument('--key', type=int, default=4)
+  argparser.add_argument('--key', type=int, default=0)
   argparser.add_argument('--norm', type=bool, default=False)
   args = argparser.parse_args()
   base_conf = OmegaConf.load(args.config)

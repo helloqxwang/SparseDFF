@@ -5,8 +5,8 @@ verbose: false
 extrinsics_path: ./camera/workspace/calibration.json
 data1: ./example_data/img/20231010_monkey_original # reference
 data2: ./example_data/img/20231010_monkey_test # test
-hand_ref_pose_name: monkey
-model_path: ./example_data/pth/glayer_key0_monkey_64_T0.007_20000.pth
+hand_ref_pose_name: monkey # the ref pose is ./camera/hand_arm/ref_pose_{}.npy
+model_path: ./refinement/glayer_key0_pie_64_T0.007_20000.pth
 img_preprocess: 
   - sam
   - sam

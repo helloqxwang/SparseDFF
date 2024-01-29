@@ -13,7 +13,7 @@ import yaml
 from matplotlib import cm
 from optimize.hand_model import robust_compute_rotation_matrix_from_ortho6d
 
-def read_tranformation(data_path:str='./camera/tranform.yaml'):
+def read_tranformation(data_path:str='./camera/transform.yaml'):
     with open(data_path, 'r') as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
     position = np.array([data['pose']['position']['x'], data['pose']['position']['y'], data['pose']['position']['z']])
@@ -159,12 +159,7 @@ class Hand_AlignmentCheck:
 
     ###### can sample some pt from the reference frame and then return the best corresponding points in the test frame
     def sample_pts(self, name='monkey'):
-        hand_gt_pose = np.load(f'./camera/hand_arm/{name}.npy')
-        # print(hand_gt_pose.shape)      
-        # hand_gt_pose[:, 2] += 0.12
-        # hand_gt_pose[:, 1] -= 0.10
-        # hand_gt_pose[:, 0] -= 0.20
-        # hand_gt_pose[:, 3:9] = np.array([0, -1, 0, 0, 0, 1])[None, :]   
+        hand_gt_pose = np.load(f'./camera/hand_arm/ref_pose_{name}.npy')
         hand_gt_pose = torch.from_numpy(hand_gt_pose).float().to(self.dev)
         self.hand.set_parameters(hand_gt_pose, retarget=False, robust=True)
 
@@ -172,9 +167,9 @@ class Hand_AlignmentCheck:
         vquery_mesh = self.hand.get_trimesh_data(0)
         hand_gt:np.ndarray = self.hand.get_surface_points()[0].detach().cpu().numpy()
         self.hand.save_pose('./data/des_ori.npy', hand_gt_pose, False, False)
-        # trimesh_show([self.pcd1 ], [vquery_mesh], show=self.viz, name=self.name, color_add_list=[self.color_ref1,])
+        trimesh_show([self.pcd1 ], [vquery_mesh], show=self.viz, name=self.name, color_add_list=[self.color_ref1,])
         reference_query_pts = hand_gt
-        # exit()
+        exit()
 
         reference_model_input = {}
         ref_query_pts = torch.from_numpy(reference_query_pts).float().to(self.dev)
