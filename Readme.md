@@ -1,6 +1,8 @@
 # SparseDFF: Sparse-View Feature Distillation for One-Shot Dexterous Manipulation
 We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RGBD observations, enabling one-shot learning of dexterous manipulations that are transferable to novel scenes. 
 
+***[ICLR 2024](https://iclr.cc/) Accepted***
+
  [Project](https://helloqxwang.github.io/SparseDFF/) | [Full Paper](https://arxiv.org/abs/2310.16838) 
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhelloqxwang%2FSparseDFF&count_bg=%23F3A7D2&title_bg=%23F96E28&icon=microbit.svg&icon_color=%2325A837&title=Hi%21&edge_flat=false)](https://hits.seeyoufarm.com)
@@ -9,7 +11,7 @@ We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RG
 
 - A brief Introduction to SparseDFF.
 - Everything mentioned in the paper and a **step-by-step guide** to use it!
-- [Friendly and Useful Installation guide for Kinect SDK](./Data_Collection.md). Codes for *automatic image capturing during manipulation transfer at runtime*.
+- A Friendly and Useful [guide](./Data_Collection.md) for **Kinect Installation** and **everything you need for data colection**!. Additional Codes for *automatic image capturing during manipulation transfer at runtime*.
 - Additional codes for EE besides Shadow Hand (Comming soon!)
 
 
