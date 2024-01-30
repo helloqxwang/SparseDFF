@@ -3,9 +3,7 @@ We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RG
 
  [Project](https://helloqxwang.github.io/SparseDFF/) | [Full Paper](https://arxiv.org/abs/2310.16838) 
 
-[![Hits]([https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhelloqxwang%2FSparseDFF&count_bg=%23BC5DC2&title_bg=%23E3B4B4&icon=microbit.svg&icon_color=%23C42121&title=Hi%21&edge_flat=false](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhelloqxwang%2FSparseDFF&count_bg=%23BC5DC2&title_bg=%23E3B4B4&icon=microbit.svg&icon_color=%23C42121&title=Hi!&edge_flat=false))](https://hits.seeyoufarm.com)
-
-
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhelloqxwang%2FSparseDFF&count_bg=%23F3A7D2&title_bg=%23F96E28&icon=microbit.svg&icon_color=%2325A837&title=Hi%21&edge_flat=false)](https://hits.seeyoufarm.com)
 
 ## What's Inside This Repository!
 
