@@ -3,13 +3,15 @@ We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RG
 
  [Project](https://helloqxwang.github.io/SparseDFF/) | [Full Paper](https://arxiv.org/abs/2310.16838) 
 
+[![Hits]([https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhelloqxwang%2FSparseDFF&count_bg=%23BC5DC2&title_bg=%23E3B4B4&icon=microbit.svg&icon_color=%23C42121&title=Hi%21&edge_flat=false](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhelloqxwang%2FSparseDFF&count_bg=%23BC5DC2&title_bg=%23E3B4B4&icon=microbit.svg&icon_color=%23C42121&title=Hi!&edge_flat=false))](https://hits.seeyoufarm.com)
+
 
 
 ## What's Inside This Repository!
 
 - A brief Introduction to SparseDFF.
-- Everything mentioned in the paper and a step-by-step guide to use it!
-- Friendly and Useful Installation guide for Kinect SDK. Codes for *automatic image capturing during manipulation transfer at runtime*.
+- Everything mentioned in the paper and a **step-by-step guide** to use it!
+- [Friendly and Useful Installation guide for Kinect SDK](./Data_Collection.md). Codes for *automatic image capturing during manipulation transfer at runtime*.
 - Additional codes for EE besides Shadow Hand (Comming soon!)
 
 
@@ -28,6 +30,7 @@ By establishing coherent feature fields on both source and target scenes, we dev
 
 
 ## Installation
+
 We provide sample data that allows you to directly conduct manipulation transfer within our collected data, and offer visualization code for visualizing the experimental results. Additionally, we also provide code for data collection using Kinect. For additional environment configuration and instructions, please refer to [Data Collection](#data-collection) Part.
 
 
@@ -59,11 +62,11 @@ bash download.sh
 
 ## Camera Installation
 
-If you simply wish to run our model (including both training and inference) on pre-captured data, there's no need for the following installation steps. Go ahead and start playing with SparseDFF directly! 
+>  If you simply wish to run our model (including both training and inference) on pre-captured data, there's no need for the following installation steps. Go ahead and start playing with SparseDFF directly! 
+>
+> However, if you intend to collect your own data using Azure Kinect, please proceed with the following setup.
 
-However, if you intend to collect your own data using Azure Kinect, please proceed with the following setup.
-
-> comming soon!
+[Friendly and Useful Installation guide for Kinect SDK](./Data_Collection.md)
 
 
 
@@ -83,19 +86,28 @@ If you'd like to quickly experience the results of our model, you can directly u
    python unified_optimize.py
    ```
 
-3. **Visualization Results**: After completing the test, if `visualize` is set to `true` in `config.yaml`, a clear trimesh visualization will be presented. Otherwise, the visualization result will be saved as an image.
+3. **A brief Visualization of Result **: After completing the test, if `visualize` is set to `true` in `config.yaml`, a clear trimesh visualization will be presented. Otherwise, the visualization result will be saved as an image.
 
-### Data Collection and Refined Model Training
 
-If you wish to test with your own data, follow these steps for data collection and preparation.
+
+### Play with your Own Data
+
+If you wish to test with your own data, follow these steps!
 
 #### Data Collection
 
+> You need to complete the [configuration](./Data_Collection.md) of the Kinect Camera before running the subsequent code. You can also collect data in your own way and then organize it into the same data structure.
+
 We utilize four [Azure Kinects](https://azure.microsoft.com/en-us/products/kinect-dk) for data collection. The steps are as follows:
 
-**Capturing 3D Data**: Use `capture_3d.py` to capture the data required for the model.
+**Capturing 3D Data**: Use`camera/capture_3d.py` to collect the data required for the model:
 
-*Structure of the Data*:
+```bash
+cd camera
+python capture_3d.py --save
+```
+
+***Structure of the Data*:**
 
 ```bash
 |____20231010_monkey_original # name
@@ -115,14 +127,14 @@ To train the refinement model corresponding to your data, follow these steps:
 
 1. **Data Preparation**: Navigate to the refinement directory and execute the following commands:
 
-   ```
+   ```bash
    cd refinement
    python read.py --img_data_path 20231010_monkey_original
    ```
 
 2. **Start Training**: Run the following command to train the model:
 
-   ```
+   ```bash
    python train_linear_probe.py --mode glayer --key 0
    ```
 
