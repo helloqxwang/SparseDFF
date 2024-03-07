@@ -7,7 +7,6 @@ example_data/
 *__pycache__*
 *pth
 *npy
-*png
 thirdparty_module/*
 __pycache__/
 ./temp.py 
