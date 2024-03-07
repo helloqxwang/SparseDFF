@@ -7,6 +7,9 @@ We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RG
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fhelloqxwang%2FSparseDFF&count_bg=%23F3A7D2&title_bg=%23F96E28&icon=microbit.svg&icon_color=%2325A837&title=Hi%21&edge_flat=false)](https://hits.seeyoufarm.com)
 
+<img src="./images/teaser.png" alt="Teaser" />
+
+
 ## What's Inside This Repository!
 
 - A brief Introduction to SparseDFF.
@@ -18,6 +21,7 @@ We introduce a novel method for acquiring view-consistent 3D DFFs from sparse RG
 
 ## Method Overview
 ### Constructing the Feature Field
+<img src="./images/constructDFF.png" alt="constructDFF" />
 Initially, we map the image features to the 3D point cloud, allowing for propagation across the 3D space to establish a dense feature field.
 
 Then, A lightweight feature refinement network optimizes with a contrastive loss between pairwise views after back-projecting the image features onto the 3D point cloud. 
@@ -25,6 +29,7 @@ Then, A lightweight feature refinement network optimizes with a contrastive loss
 Additionally, we implement a point-pruning mechanism to augment feature continuity within each local neighborhood. 
 
 ### Optimize the EE Pose
+<img src="./images/method_hand_optim.jpg" alt="method_hand_optim" />
 By establishing coherent feature fields on both source and target scenes, we devise an energy function that facilitates the minimization of feature discrepancies w.r.t. the end-effector parameters between the demonstration and the target manipulation. 
 
 
@@ -38,6 +43,7 @@ We provide bash script for example data download and pretrained model download.
 ```
 git clone --recurse-submodules git@github.com:Halowangqx/SparseDFF.git
 conda create -n sparsedff python=3.9
+conda activate sparsedff
 
 # Install submodules
 cd ./SparseDFF/thirdparty_module/dinov2
