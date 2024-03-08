@@ -401,9 +401,15 @@
 
                 <p class="body_text">
                     <ul>
-                    	<li class="body_text">We propose a novel framework for <b>one-shot learning</b> of dexterous manipulations, utilizing semantic scene understandings distilled into 3D feature fields.</li>
-                    	<li class="body_text">We develop an efficient methodology for extracting <b>view-consistent 3D features</b> from 2D image models, incorporating a lightweight feature refinement network and a point pruning mechanism. This enables the direct application of our network to novel scenes to predict consistent features without any modifications or fine-tuning.</li>
-                    	<li class="body_text">Extensive real-world experiments with a dexterous hand validate our method, demonstrating robustness and superior <b>generalization</b> capabilities in diverse scenarios.</li>
+
+                    	<li class="body_text">We introduce a novel framework for <b>one-shot learning</b> of dexterous manipulations, leveraging
+                            semantic scene understanding distilled into 3D feature fields.</li>
+                    	<li class="body_text">We devise an efficient method for deriving <b>view-consistent 3D features</b> from 2D image models,
+                            incorporating a lightweight feature refinement network and a point pruning mechanism. This
+                            facilitates the application of our network to new scenes, predicting consistent features without
+                            requiring any adjustments or fine-tuning.</li>
+                    	<li class="body_text">• Our <b>real-world</b> experiments with a dexterous hand affirm our method’s effectiveness, demonstrating
+                            its robustness and superior <b>generalization</b> ability in varied scenarios.</li>
                     </ul>
                 </p>
             </div>
@@ -439,17 +445,24 @@
                     Method Overview
                 </p>
                 <br>
-                <img src="images/teaser.png" class="teaser_fig" width="90%">
+                <img src="images/teaser.png" class="teaser_fig" >
                 <br>
+
+                <p class="body_text">
+                    Our method introduces a novel method, SparseDFF, for distilling view-consistent 3D Distilled Feature Field ( DFF ) from sparse RGBD images, readily generalizable to novel scenes
+                    without any modifications or fine-tuning. The DFFs create dense correspondences across scenes, enabling
+                    one-shot learning of dexterous manipulations. This approach facilitates seamless manipulation transfer to new
+                    scenes, effectively handling variations in object poses, deformations, scene contexts, and categories.
+                </p>
                 <p class="text_subheader">
-                    3D Feature Distillation and Point Pruning
+                    3D Distilled Feature Field
                 </p>
                 <br>
-                <img src="images/method1.png" class="teaser_fig" width="90%">
+                <img src="images/constructDFF.png" class="teaser_fig" width="90%">
                 <br>
                 
                 <p class="body_text">
-                    Initially, Given a pair of RGBD scans from a 3D scene, we first extract DINO features from the images and back-project them to the partial
+                    <!-- Initially, Given a pair of RGBD scans from a 3D scene, we first extract DINO features from the images and back-project them to the partial
                     point clouds.  However, while DINO does exhibit correspondences across views, it is not strictly multiview-invariant, leading
                     to local feature discrepancies in overlapping views.
                     To address the problem of local feature discrepancies in overlapping views, 
@@ -462,21 +475,30 @@
                     During training, the refined features obtained from the network are passed through a projection head to obtain projected features. 
                     However, after training on the source scene, the projection head is discarded, 
                     and only the feature refinement network is utilized for novel scenes.
-                    Additionally, we implement a point-pruning mechanism to augment feature continuity within each local neighborhood. 
+                    Additionally, we implement a point-pruning mechanism to augment feature continuity within each local neighborhood.  -->
+                    Given a 3D point cloud X, we aim to first construct a continuous feature field
+                    surrounding the scene, as illustrated in the Figure above. This field provides semantic understandings for interscene correspondences, extending beyond geometric descriptors. Utilizing a
+                    lightweight feature network, trained once on the source scene, enables direct adaptation to target
+                    scenes without additional fine-tuning. We then introduce a pruning method to enhance feature
+                    continuity, akin to the classical Hough voting . 
+                    
                 </p>
 
                 <p class="text_subheader">
                     End-Effector Optimization
                 </p>
                 <br>
-                <img src="images/method2.png" class="teaser_fig" width="90%">
+                <img src="images/method_hand_optim.jpg" class="teaser_fig" width="90%">
                 <br>
 
                 <p class="body_text">
                     By establishing coherent feature fields on both source and target scenes, we devise an energy function that facilitates 
                     the minimization of feature discrepancies w.r.t. the end-effector parameters between the demonstration and the target 
                     manipulation. Additionally, to prevent extreme hand poses that could potentially damage the robot, we impose a
-                    pose constraint Eposepβq penalizing out-of-limit hand pose.
+                    pose constraint energy loss penalizing out-of-limit hand pose.
+                    <!-- We employ the demonstrated end-effector pose to formulate an energy function between source and target scenes
+                    via the feature fields. This function facilitates the optimization of the end-effector pose in the target
+                    scene while conforming to physical constraints  -->
                 </p>
 
                 <!-- <ul class="body_text">
